@@ -1,3 +1,20 @@
+/* google fonts
+font-family: 'Amatic SC', cursive;
+font-family: 'Caveat', cursive;
+font-family: 'Chakra Petch', sans-serif;
+font-family: 'Cookie', cursive;
+font-family: 'Festive', cursive;
+font-family: 'Fruktur', cursive;
+font-family: 'Henny Penny', cursive;
+font-family: 'Kaushan Script', cursive;
+font-family: 'Lobster', cursive;
+font-family: 'Lobster Two', cursive;
+font-family: 'Pacifico', cursive;
+font-family: 'Qahiri', sans-serif;
+font-family: 'Satisfy', cursive;
+font-family: 'Space Mono', monospace;
+*/
+
 :root {
     --grid-cols: 1;
     --grid-rows: 1;
@@ -44,18 +61,69 @@ header {
     flex-wrap: nowrap;
 }
 
+#list-user-title {
+    font-size: 2em;
+    font-family: 'Festive', cursive;
+    color: var(--grid-item-color);
+    transition: color 2s;
+}
+
+#list-user-title:hover {
+    transform: scale(1.01);
+    color: black;
+
+}
+
 #nav-menu {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     flex-wrap: nowrap;
+    height: inherit;
 }
 
-#list-user-title {
-
+.nav-item-box {
+    display:flex;
+    align-items: center;
+    box-sizing: border-box;
+    vertical-align: baseline;
+    height: 100%;
+    padding: 0px 7px;
+    transition: color 0.5s;
 }
 
-.container {
+.nav-item-box:hover {
+    background-color: var(--grid-item-color);
+    color: var(--top-bar-color);
+}
+
+#wall {
+    position: fixed;
+    top: var(--top-bar-allocated-space);
+    left: 0;
+    height: calc(100vh - var(--top-bar-allocated-space));
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+}
+
+#edit-popup {
+    height: 100px;
+    aspect-ratio: 1;
+    background-color: hotpink;
+}
+
+.move-to-front {
+    z-index: 5049 !important;
+}
+
+.blur {
+    filter: blur(5px);
+}
+
+#container {
     position: relative;
     top: var(--top-bar-allocated-space);
     margin: 0;
@@ -83,7 +151,7 @@ header {
 }
 
 .grid-item:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .cell-delete {
@@ -113,7 +181,7 @@ header {
     color: white;
 }
 
-.cell-image {
+.cell-link {
     padding: 0.2em;
     grid-column: col-img-start / col-img-end;
     grid-row: row-img-start / row-img-end;
@@ -134,7 +202,7 @@ header {
 }
 
 .invisible {
-    display:none;
+    display:none !important;
 }
 
 .title {

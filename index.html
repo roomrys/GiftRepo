@@ -5,20 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat&family=Chakra+Petch:wght@300&family=Cookie&family=Festive&family=Fruktur&family=Henny+Penny&family=Kaushan+Script&family=Lobster&family=Lobster+Two:ital,wght@1,700&family=Pacifico&family=Qahiri&family=Satisfy&family=Space+Mono&display=swap" rel="stylesheet">
     <script src="create_grid.js" defer></script>
+    <script src="buttons.js" defer></script>
     <title>Document</title>
 </head>
 <body>
 <header>
-    <div id="list-user-title">User's Xmas List</div>
+    <div id="list-user-title" class="header button">User's Xmas List</div>
     <div id="nav-menu">
-        <div class="nav-item">Edit Items</div>
-        <div class="nav-item">Planned Purchases</div>
-        <div class="nav-item">Share List</div>
-        <div class="nav-item">Switch User</div>
+        <div id="edit-items-box" class="header nav-item-box button">
+            <div id="edit-items-button" class="header nav-item button">Edit Items</div>
+        </div>
+        <div class="header nav-item-box button">
+            <div class="header nav-item button">Planned Purchases</div>
+        </div>
+        <div class="header nav-item-box button">
+            <div class="header nav-item button">Share List</div>
+        </div>
+        <div class="header nav-item-box button">
+            <div class="header nav-item button">Switch User</div>
+        </div>
     </div>
 </header>
-<div class="container">
+<div id="container">
+</div>
+<div id="wall" class="move-to-front invisible">
+    <div id="edit-popup"></div>
 </div>
 </body>
 </html>
