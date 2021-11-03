@@ -29,7 +29,8 @@ font-family: 'Space Mono', monospace;
     --top-bar-color: rgb(var(--top-bar-color-red), var(--top-bar-color-green), var(--top-bar-color-blue));
     --grid-item-color: rgb(min(255, calc(var(--top-bar-color-red) + 39)), min(255, calc(var(--top-bar-color-green) + 121)), min(255, calc(var(--top-bar-color-blue) + 93)));
 
-    --background-color: lightslategrey;
+    --background-color: rgb(119, 136, 153);
+    --edit-button-background-color: rgb(224, 217, 217);
 }
 
 a {
@@ -44,7 +45,7 @@ body {
 
 header {
     position: fixed;
-    box-shadow:slategray;
+    box-shadow: 0px 2px 5px;
     top: 0;
     left: 0;
     width: 100%;
@@ -53,7 +54,6 @@ header {
     font-family: var(--ff-header);
     box-sizing: border-box;
     padding: 8px;
-    box-shadow: 0px 2px 5px;
     z-index: 5050;
     display: flex;
     justify-content: space-between;
@@ -110,9 +110,111 @@ header {
 }
 
 #edit-popup {
-    height: 100px;
-    aspect-ratio: 1;
-    background-color: hotpink;
+    --width-ar: 2;
+    --length-ar: 3;
+    --aspect-ratio: calc(var(--width-ar) / var(--length-ar));
+    --margin-col-perc: 8%;
+    display: grid;
+    grid-template-rows: [row-exit-start row-title-start] calc(var(--margin-col-perc) * var(--aspect-ratio)) 
+        [row-title-end row-exit-end row-auto-entry-start] 2fr 
+        [row-auto-entry-end] calc(var(--margin-col-perc) * var(--aspect-ratio) / 2) 
+        [row-or] calc(var(--margin-col-perc) * var(--aspect-ratio) / 2) 
+        [row-manual-entry-start] 3fr 
+        [row-manual-entry-end row-save-start] calc(var(--margin-col-perc) * var(--aspect-ratio)) 
+        [row-save-end];
+    grid-template-columns: var(--margin-col-perc) 
+        [col-content-start] auto 
+        [col-save-start] var(--margin-col-perc) 
+        [col-content-end col-exit-start] var(--margin-col-perc) 
+        [col-exit-end col-save-end];
+    width: 50vw;
+    aspect-ratio: var(--width-ar) / var(--length-ar);
+    background-color: var(--top-bar-color);
+    box-sizing: border-box;
+    padding: 5px;
+    box-shadow: 2px 2px 5px;
+}
+
+#title-edit-popup {
+    grid-column: col-content-start / col-content-end;
+    grid-row: row-title-start / row-title-end;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+#exit-edit-popup {
+    grid-column: col-exit-start / col-exit-end;
+    grid-row: row-exit-start / row-exit-end;
+    text-align: right;
+}
+
+#save-edit-popup {
+    grid-column: col-save-start / col-save-end;
+    grid-row: row-save-start / row-save-end;
+    max-width: 100%;
+    max-height: 100%;
+    color: black;
+    background-color: var(--grid-item-color);
+    border:1px solid black;
+}
+
+#save-edit-popup:hover {
+    color: var(--grid-item-color);
+    background-color: black;
+    border:1px solid var(--grid-item-color);
+}
+
+#exit-edit-popup:hover {
+    filter: invert(92%) sepia(12%) saturate(390%) hue-rotate(299deg) brightness(99%) contrast(106%);
+}
+
+#auto-entry {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    grid-column: col-content-start / col-content-end;
+    grid-row: row-auto-entry-start / row-auto-entry-end;
+    box-sizing: border-box;
+    padding: 5px;
+    font-family: var(--ff-header);
+}
+
+#title-auto-entry {
+    width: 100%;
+    height: 2em;
+    background-color: var(--grid-item-color);
+    border:1px solid black;
+}
+
+#link-auto-entry {
+    width: 100%;
+    height: 2em;
+    background-color: var(--grid-item-color);
+    border:1px solid black;
+}
+
+#or {
+    grid-column: col-content-start / col-content-end;
+    grid-row: row-or;
+    text-align: center;
+    width: 100%;
+    border-bottom: 1px solid #000; 
+    line-height: 0.05em;
+    height: 1px;
+    display: flex;
+    place-content: center;
+}
+
+#or-text {
+    color: var(--grid-item-color);
+    background-color: var(--top-bar-color);
+}
+
+#manual-entry {
+    grid-column: col-content-start / col-content-end;
+    grid-row: row-manual-entry-start / row-manual-entry-end;
+    box-sizing: border-box;
+    padding: 10px;
 }
 
 .move-to-front {
@@ -146,18 +248,26 @@ header {
     aspect-ratio: 1 / 1;
     box-shadow: 2px 2px 5px;
     background-color: var(--grid-item-color);  /*rgb(255, 233, 240);*/
-    grid-template-rows: [row-delete-start row-title-start] 10% [row-title-end row-delete-end row-img-start] 80% [row-img-end row-edit-start row-price-start] 1fr [row-price-end row-edit-end];
-    grid-template-columns: [col-price-start] 1fr [col-img-start col-title-start] 1fr [col-price-end] 60% [col-edit-start] 1fr [col-title-end col-img-end col-delete-start] 1fr [col-delete-end col-edit-end];
+    grid-template-rows: [row-delete-start row-title-start] 10% 
+        [row-title-end row-delete-end row-img-start] 80% 
+        [row-img-end row-edit-start row-price-start] 1fr 
+        [row-price-end row-edit-end];
+    grid-template-columns: [col-price-start] 1fr 
+        [col-img-start col-title-start] 1fr 
+        [col-price-end] 60% 
+        [col-edit-start] 1fr 
+        [col-title-end col-img-end col-delete-start] 1fr 
+        [col-delete-end col-edit-end];
 }
 
-.grid-item:hover {
+#container > .grid-item:hover {
     transform: scale(1.05);
 }
 
 .cell-delete {
-    text-align: right;
     grid-column: col-delete-start / col-delete-end;
     grid-row: row-delete-start / row-delete-end;
+    text-align: right;
 }
 
 .cell-delete-img:hover {
@@ -165,13 +275,16 @@ header {
 }
 
 .cell-edit {
-    display: grid;
     grid-column: col-edit-start / col-edit-end;
     grid-row: row-edit-start / row-edit-end;
-    background-color: rgb(224, 217, 217);
-    box-sizing: border-box;
+    background-color: var(--edit-button-background-color);
     border:1px solid var(--top-bar-color);
+}
+
+.text-button {
+    display: grid;
     place-items: center;
+    box-sizing: border-box;
     font-family: var(--ff-header);
     font-size: 1em;
 }
@@ -181,10 +294,11 @@ header {
     color: white;
 }
 
-.cell-link {
+.cell-link, .cell-image {
     padding: 0.2em;
     grid-column: col-img-start / col-img-end;
     grid-row: row-img-start / row-img-end;
+    cursor: pointer;
 }
 
 .cell-title {
@@ -210,6 +324,9 @@ header {
     font-family: var(--ff-header);
     font-weight: bold;
     color: black;
+    cursor: default;
+    display: grid;
+    place-items: center;
 }
 
 .price {
@@ -217,7 +334,9 @@ header {
     font-family: var(--ff-header);
     font-weight: bold;
     color: black;
-    text-align: left !important;
+    display: grid;
+    justify-items: start;
+    align-items: center;
 }
 
 img {

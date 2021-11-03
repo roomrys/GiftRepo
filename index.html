@@ -33,7 +33,33 @@
 <div id="container">
 </div>
 <div id="wall" class="move-to-front invisible">
-    <div id="edit-popup"></div>
+    <div id="edit-popup" class="edit-popup">
+        <img id="exit-edit-popup" class="edit-popup button img" src="./svg/exit.svg"></img>
+        <div id="save-edit-popup" class="edit-popup text-button button">Save</div>
+        <div id="title-edit-popup" class="title">
+            Edit Entry
+        </div>
+        <div id="auto-entry">
+            <form>
+                <label for="title-auto-entry">Title</label>
+                <input type="text" id="title-auto-entry" name="title-auto-entry" value="Yoga Mat">
+            </form>
+            <!-- <div id="title-auto-entry"></div> -->
+            <form>
+                <label for="link-auto-entry">Amazon Link</label>
+                <input type="url" id="link-auto-entry" name="link-auto-entry" value="https://www.amazon.com/dp/B0000DZFXZ/ref=redir_mobile_desktop?_encoding=UTF8&aaxitk=25ad622efea6265a9d524c4228ea6dcb&hsa_cr_id=5758817560001&pd_rd_plhdr=t&pd_rd_r=7e54cf5c-8902-4c01-a1df-3b2d1152981a&pd_rd_w=Ab5Xj&pd_rd_wg=nTi7C&ref_=sbx_be_s_sparkle_mcd_asin_0_img">
+            </form>
+        </div>
+        <div id="or">
+            <div id="or-text" class="title">
+                OR
+            </div>
+        </div>
+        <div id="manual-entry">
+            <div id="title-manual-entry"></div>
+            <div id="cell-manual-entry"></div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
