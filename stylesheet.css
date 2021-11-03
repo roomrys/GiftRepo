@@ -23,9 +23,9 @@ font-family: 'Space Mono', monospace;
     --ff-title-container: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 
     --top-bar-allocated-space: 50px;
-    --top-bar-color-red: 216;
-    --top-bar-color-green: 112;
-    --top-bar-color-blue: 147;
+    --top-bar-color-red: 26/*216*/;
+    --top-bar-color-green: 101/*112*/;
+    --top-bar-color-blue: 177/*147*/;
     --top-bar-color: rgb(var(--top-bar-color-red), var(--top-bar-color-green), var(--top-bar-color-blue));
     --grid-item-color: rgb(min(255, calc(var(--top-bar-color-red) + 39)), min(255, calc(var(--top-bar-color-green) + 121)), min(255, calc(var(--top-bar-color-blue) + 93)));
 
@@ -35,7 +35,7 @@ font-family: 'Space Mono', monospace;
 
 a {
     text-decoration: none;
-    color: inherit;
+    color:inherit;
 }
 
 body {
