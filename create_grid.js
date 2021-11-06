@@ -5,7 +5,7 @@ for (let i = 0; i<11; i++) {
 }
 
 create_grid(dictArray);
-createCellInsertArray(dictArray, dictArray[0], document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
+createCell(dictArray[0], document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
 
 createCellInsertArray(dictArray, dictArray[0], document.getElementById("container"));
 
@@ -63,7 +63,7 @@ function createCell(dict, container, isAppend=false, isDeletable=true, hasInput=
         link.type = "file";
         link.accept = ".jpg,.jpg,.gif,.png,.svg";
         link.style = "opacity: 0";
-        link.onchange = updateImg(cellImg, link);
+        // cell.oninput = updateImg(document.getElementById(".manual-entry-cell"));
         cell.appendChild(link).classList = "cell-link";
     }
     else {
@@ -119,10 +119,49 @@ function editGridItem(gridId, newTitle, newPrice, newLink, newImg) {
 
     let cellImg = cell.querySelector(".cell-image");
     cellImg.src = newImg;
+
+    editDictArray(gridId, dictArray);
 }
 
-function updateImg(cellImg, cellLink) {
-    console.log(cellImg);
-    console.log(cellLink);
-    // cellImg.src = cellLink.value;
+function editEditPopup(gridId) {
+    let cell = document.getElementById(gridId);
+
+    let title = cell.querySelector(".cell-title");
+    editPopup.autoEntry.title.value = title.innerHTML;
+    editPopup.manualEntry.title().value = title.innerHTML;
+
+    let price = cell.querySelector(".cell-price");
+    editPopup.manualEntry.price().value = price.innerHTML;
+
+    let link = cell.querySelector(".cell-link");
+    editPopup.autoEntry.link.value = link.href;
+
+    let cellImg = cell.querySelector(".cell-image");
+    editPopup.manualEntry.image().src = cellImg.src;
+}
+
+function editDictArray(gridId, dictArray) {
+    let cell = document.getElementById(gridId);
+    let cellTitle = cell.querySelector(".cell-title");
+    let cellPrice = cell.querySelector(".cell-price");
+    let cellLink = cell.querySelector(".cell-link");
+    let cellImg = cell.querySelector(".cell-image");
+
+    dictArray[gridId] = {...dictArray[gridId],
+        title: cellTitle.innerHTML,
+        price: cellPrice.innerHTML,
+        link: cellLink.href,
+        img: cellImg.src
+    }
+}
+
+function deleteCellDictArray(gridId, dictArray) {
+    dictArray.splice(gridId, 1);
+    updateGridIds();
+    console.log(dictArray);
+}
+
+function deleteCell(gridId) {
+    document.getElementById(gridId).remove();
+    deleteCellDictArray(gridId, dictArray);
 }
