@@ -1,14 +1,41 @@
 
 // for edit button
+let editItems = {
+    button: document.getElementById("edit-items-button"),
+
+    identityList: ["edit-items-button", "edit-items-box"], 
+
+    // PROBLEM: this.status always set to false if define visibility as a function
+    visibility: function(btn=this.button) {
+        let vis = {
+            toggleElementsList: Array.from(document.getElementsByClassName("edit")),
+            toggleLinksList: document.querySelectorAll("a.cell-link"),
+            status: false,
+            toggle: function(isVisible= !(this.status), button=btn) {
+                this.status = isVisible;
+                let addOrRemove = function(element, classToAddOrRemove) {
+                    isVisible?element.classList.remove(classToAddOrRemove):element.classList.add(classToAddOrRemove);
+                };
+                this.toggleElementsList.forEach( element => {
+                    addOrRemove(element, "invisible");
+                })
+                this.toggleLinksList.forEach( element => {
+                    addOrRemove(element, "disabled-link");
+                })
+                isVisible?(button.innerHTML = "Exit Edit"):(button.innerHTML = "Edit Items");
+            }
+        };
+        console.log(vis.status)
+        return vis
+    }
+
+}
+
 let editItemsButton = document.getElementById("edit-items-button")
 let allEditVisible = Array.from(document.getElementsByClassName("edit"));
 let allLinksDisable = document.querySelectorAll("a.cell-link");
-// console.log(allLinksDisable);
-
-// for wall (for edit popup)
-let wall = document.getElementById('wall');
 let closeEditorClasses = ["header", "edit-popup"];
-let container = document.getElementById("container");
+// console.log(allLinksDisable);
 
 // for edit popup
 let editPopup = {
@@ -33,16 +60,26 @@ let editPopup = {
     autoEntry: {
         title:  document.getElementById("title-auto-entry"),
         link: document.getElementById("link-auto-entry")
+    },
+
+    visibility: {
+        wall: document.getElementById('wall'),
+        container: document.getElementById("container"),
+        closeEditorClassList: ["header", "edit-popup"],
+        status: false,
+        toggle: function (isOpen=this.status) {
+            this.status = isOpen;
+            if (this.status) {
+                this.wall.classList.remove("invisible");
+                this.container.classList.add("blur");
+            }
+            else {
+                this.wall.classList.add("invisible");
+                this.container.classList.remove("blur");
+            }
+        }
     }
 }
-
-// let titleEditEntry = document.getElementById("title-edit-popup");
-// let titleAutoEntry = document.getElementById("title-auto-entry");
-// let linkAutoEntry = document.getElementById("link-auto-entry");
-// let manualEntryCell = document.getElementById("manual-entry-cell");
-// let priceManualEntry = manualEntryCell.querySelector(".cell-price");
-// let titleManualEntry = manualEntryCell.querySelector(".cell-title");
-// let imageManualEntry = manualEntryCell.querySelector(".cell-image");
 
 // handles all click events
 document.addEventListener("click", event => {
@@ -51,17 +88,17 @@ document.addEventListener("click", event => {
     // console.log(eventId);
     // console.log(eventClassList);
    if (eventClassList.includes("button")) { // check if clicked a button
-       if (eventClassList.some(v => closeEditorClasses.includes(v))) { 
+       if (eventClassList.some(v => editPopup.visibility.closeEditorClassList.includes(v))) { 
            // close editor
-           openCloseEditor(false);
+           editPopup.visibility.toggle(false);
        }
-        if (["edit-items-button", "edit-items-box"].includes(eventId)) { 
+        if (editItems.identityList.includes(eventId)) { 
             // hide/unhide delete and edit buttons
-            toggleEditDelete();
+            editItems.visibility().toggle();
         }
         else if (eventClassList.includes("cell-edit")) { 
             // open editor and load cell
-            openCloseEditor(true);
+            editPopup.visibility.toggle(true);
             editPopup.title.innerHTML = "Edit Entry";
             editId = event.target.parentNode.id;  // global variable for editId
             editEditPopup(editId); // edit-popup
@@ -81,18 +118,6 @@ document.addEventListener("click", event => {
         }
     }
 })
-
-function openCloseEditor(isOpen) {
-    if (isOpen) {
-        wall.classList.remove("invisible");
-        container.classList.add("blur");
-    }
-    else {
-        wall.classList.add("invisible");
-        container.classList.remove("blur");
-    }
-
-}
 
 function toggleEditDelete() {
     allEditVisible.forEach( element => {
