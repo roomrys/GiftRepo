@@ -34,6 +34,97 @@ function create_grid(dictArray, cols=3) {
     };
 }
 
+class gridItem {
+    createCell(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
+        this.cell = document.createElement("div");
+        if (idd !== "-1") {
+            cell.id = idd;
+        }
+        appendOrInsert(isAppend, container, this.cell, container.firstChild).className = "grid-item";
+    
+        if (isDeletable) {
+            this.cellDelete = document.createElement("div");
+            this.cell.appendChild(cellDelete).className = "cell-delete button edit invisible";
+    
+            this.cellDeleteImg = document.createElement("img");
+            this.cellDeleteImg.src = './svg/trashcan.svg';
+            this.cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button edit invisible";
+    
+            this.cellEdit = document.createElement("div");
+            this.cellEdit.innerHTML = "Edit";
+            this.cell.appendChild(cellEdit).className = "cell-edit text-button button edit invisible";
+        }
+    
+        if (hasInput) {
+            this.cellImg = document.createElement("img");
+            this.cellImg.src = dict['img'];
+            this.cell.appendChild(cellImg).className = "cell-image img";
+    
+            this.link = document.createElement("input");
+            this.link.type = "file";
+            this.link.accept = ".jpg,.jpg,.gif,.png,.svg";
+            this.link.style = "opacity: 0";
+            this.cell.appendChild(link).classList = "cell-link";
+        }
+        else {
+            this.link = document.createElement("a");
+            this.link.href = dict['link'];
+            this.cell.appendChild(link).classList = "cell-link";
+    
+            this.cellImg = document.createElement("img");
+            this.cellImg.src = dict['img'];
+            this.link.appendChild(cellImg).className = "cell-image img";
+        }
+    
+        if (hasInput) {
+            this.titleInput = document.createElement("input");
+            this.titleInput.value = dict['title'];
+            this.cell.appendChild(titleInput).className = "cell-title title";
+    
+            this.price = document.createElement("input");
+            this.price.value = dict['price'];
+            this.cell.appendChild(price).className = "cell-price price";
+        }
+        else {
+            this.title = document.createElement("div");
+            this.title.innerHTML = dict['title'];
+            this.cell.appendChild(title).className = "cell-title title";
+    
+            this.price = document.createElement("div");
+            this.price.innerText = dict['price'];
+            this.cell.appendChild(price).className = "cell-price price";
+        }
+    }
+
+    createCellInsertArray(dictArray, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
+        createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
+        return isAppend?dictArray.push(newDict):dictArray.unshift(newDict);
+    }
+
+    appendOrInsert(isAppend, parentNode, newNode, refNode=newNode) {
+        return isAppend?parentNode.appendChild(newNode):parentNode.insertBefore(newNode, refNode);
+    }
+
+    // editGridItem(gridId, newTitle, newPrice, newLink, newImg) {
+    //     // let cell = document.getElementById(gridId);
+    
+    //     // let title = this.cell.querySelector(".cell-title");
+    //     this.title.innerHTML = newTitle;
+    
+    //     // let price = cell.querySelector(".cell-price");
+    //     this.price.innerHTML = newPrice;
+    
+    //     // let link = cell.querySelector(".cell-link");
+    //     this.link.href = newLink;
+    
+    //     // let cellImg = cell.querySelector(".cell-image");
+    //     this.cellImg.src = newImg;
+    
+    //     editDictArray(gridId, dictArray);
+    // }
+
+}
+
 function createCell(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
     let cell = document.createElement("div");
     if (idd !== "-1") {

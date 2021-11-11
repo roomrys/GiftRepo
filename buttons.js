@@ -5,37 +5,25 @@ let editItems = {
 
     identityList: ["edit-items-button", "edit-items-box"], 
 
-    // PROBLEM: this.status always set to false if define visibility as a function
-    visibility: function(btn=this.button) {
-        let vis = {
-            toggleElementsList: Array.from(document.getElementsByClassName("edit")),
-            toggleLinksList: document.querySelectorAll("a.cell-link"),
-            status: false,
-            toggle: function(isVisible= !(this.status), button=btn) {
-                this.status = isVisible;
-                let addOrRemove = function(element, classToAddOrRemove) {
-                    isVisible?element.classList.remove(classToAddOrRemove):element.classList.add(classToAddOrRemove);
-                };
-                this.toggleElementsList.forEach( element => {
-                    addOrRemove(element, "invisible");
-                })
-                this.toggleLinksList.forEach( element => {
-                    addOrRemove(element, "disabled-link");
-                })
-                isVisible?(button.innerHTML = "Exit Edit"):(button.innerHTML = "Edit Items");
-            }
-        };
-        console.log(vis.status)
-        return vis
+    visibility: {
+        toggleElementsList: Array.from(document.getElementsByClassName("edit")),
+        toggleLinksList: document.querySelectorAll("a.cell-link"),
+        status: false,
+        toggle: function(isVisible= !(this.status), button=editItems.button) {
+            this.status = isVisible;
+            let addOrRemove = function(element, classToAddOrRemove) {
+                isVisible?element.classList.remove(classToAddOrRemove):element.classList.add(classToAddOrRemove);
+            };
+            this.toggleElementsList.forEach( element => {
+                addOrRemove(element, "invisible");
+            })
+            this.toggleLinksList.forEach( element => {
+                addOrRemove(element, "disabled-link");
+            })
+            isVisible?(button.innerHTML = "Exit Edit"):(button.innerHTML = "Edit Items");
+        }
     }
-
 }
-
-let editItemsButton = document.getElementById("edit-items-button")
-let allEditVisible = Array.from(document.getElementsByClassName("edit"));
-let allLinksDisable = document.querySelectorAll("a.cell-link");
-let closeEditorClasses = ["header", "edit-popup"];
-// console.log(allLinksDisable);
 
 // for edit popup
 let editPopup = {
@@ -94,7 +82,7 @@ document.addEventListener("click", event => {
        }
         if (editItems.identityList.includes(eventId)) { 
             // hide/unhide delete and edit buttons
-            editItems.visibility().toggle();
+            editItems.visibility.toggle();
         }
         else if (eventClassList.includes("cell-edit")) { 
             // open editor and load cell
@@ -118,12 +106,3 @@ document.addEventListener("click", event => {
         }
     }
 })
-
-function toggleEditDelete() {
-    allEditVisible.forEach( element => {
-        element.classList.toggle("invisible");
-    })
-    allLinksDisable.forEach( element => {
-        element.classList.toggle("disabled-link");
-    });
-}
