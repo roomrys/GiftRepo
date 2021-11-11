@@ -42,7 +42,12 @@ let editPopup = {
         },
         link: function() {
             return this.cell.querySelector(".cell-link")
-        }
+        },
+        updateTitle: function(newTitle) {
+            editPopup.manualEntry.title().value = newTitle;
+        },
+        updateImage: function() {
+            editPopup.manualEntry.image().src = URL.createObjectURL(editPopup.manualEntry.link().files[0])}
     },
 
     autoEntry: {
@@ -66,6 +71,23 @@ let editPopup = {
                 this.container.classList.remove("blur");
             }
         }
+    },
+
+    edit: function(gridId=gridItem.selectId) {
+        let cell = document.getElementById(gridId);
+    
+        let title = cell.querySelector(".cell-title");
+        editPopup.autoEntry.title.value = title.innerHTML;
+        editPopup.manualEntry.title().value = title.innerHTML;
+    
+        let price = cell.querySelector(".cell-price");
+        editPopup.manualEntry.price().value = price.innerHTML;
+    
+        let link = cell.querySelector(".cell-link");
+        editPopup.autoEntry.link.value = link.href;
+    
+        let cellImg = cell.querySelector(".cell-image");
+        editPopup.manualEntry.image().src = cellImg.src;
     }
 }
 
@@ -79,6 +101,7 @@ document.addEventListener("click", event => {
        if (eventClassList.some(v => editPopup.visibility.closeEditorClassList.includes(v))) { 
            // close editor
            editPopup.visibility.toggle(false);
+           editItems.visibility.toggle(false);
        }
         if (editItems.identityList.includes(eventId)) { 
             // hide/unhide delete and edit buttons
@@ -87,22 +110,22 @@ document.addEventListener("click", event => {
         else if (eventClassList.includes("cell-edit")) { 
             // open editor and load cell
             editPopup.visibility.toggle(true);
-            editPopup.title.innerHTML = "Edit Entry";
-            editId = event.target.parentNode.id;  // global variable for editId
-            editEditPopup(editId); // edit-popup
+            gridItem.selectId = event.target.parentNode.id;  // global variable for editId
+            // editId = event.target.parentNode.id;  // global variable for editId
+            editPopup.edit(); // edit-popup
         }
         else if (eventId === "save-edit-popup") {
             // edit grid item after saving editor popup
-            newTitle = editPopup.manualEntry.title().value;
-            newPrice = editPopup.manualEntry.price().value;
-            newLink = editPopup.autoEntry.link.value;
-            newImg = editPopup.manualEntry.image().src;
-            editGridItem(editId, newTitle, newPrice, newLink, newImg)
+            let newTitle = editPopup.manualEntry.title().value;
+            let newPrice = editPopup.manualEntry.price().value;
+            let newLink = editPopup.autoEntry.link.value;
+            let newImg = editPopup.manualEntry.image().src;
+            gridItem.edit(newTitle, newPrice, newLink, newImg)
         }
         else if (eventClassList.some(classFromList => 
                 ["cell-delete", "cell-delete-img"].includes(classFromList))) {
             // deletes cell if hit delete button
-            deleteCell(event.target.parentNode.parentNode.id);
+            gridItem.deleteCell(event.target.parentNode.parentNode.id);
         }
     }
 })

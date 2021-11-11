@@ -1,258 +1,167 @@
-let dictArray = [];
-let defaultDict = {img: './svg/present.svg', price:'$888', link:'https://codepen.io/sosuke/pen/Pjoqqp'};
-for (let i = 0; i<11; i++) {
-    dictArray[i] = {...defaultDict, title: "Title " + i}
-}
+let dictArray = {
+    defaultDict: {img: './svg/present.svg', 
+        price:'$888', 
+        link:'https://codepen.io/sosuke/pen/Pjoqqp'},
 
-create_grid(dictArray);
-createCell(dictArray[0], document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
+    getArr: function() { // pull this value from database
+        let array = [];
+        for (let i = 0; i<11; i++) {
+            array[i] = {...dictArray.defaultDict, title: "Title " + i}
+        };
+        return array
+    },
 
-createCellInsertArray(dictArray, dictArray[0], document.getElementById("container"));
+    edit(gridId, dictArr) {
+        let cell = document.getElementById(gridId);
+        let cellTitle = cell.querySelector(".cell-title");
+        let cellPrice = cell.querySelector(".cell-price");
+        let cellLink = cell.querySelector(".cell-link");
+        let cellImg = cell.querySelector(".cell-image");
+    
+        dictArr[gridId] = {...dictArr[gridId],
+            title: cellTitle.innerHTML,
+            price: cellPrice.innerHTML,
+            link: cellLink.href,
+            img: cellImg.src
+        }
+    },
 
-updateGridIds();
-editGridItem("1", "NewTitle", "$0", "https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array", "./svg/exit.svg")
-
-
-function updateGridIds() {
-    let arrGridItem = Array.from(document.querySelectorAll(".grid-item"));
-    let idxManualEntry = arrGridItem.indexOf(document.getElementById("manual-entry-cell"));
-    (idxManualEntry >= 0)?arrGridItem.splice(idxManualEntry, 1):arrGridItem;
-
-    for (let i = 0; i < arrGridItem.length; i++) {
-        arrGridItem[i].id = i;
+    deleteCell(gridId, dictArr) {
+        dictArr.splice(gridId, 1);
+        grid.updateGridIds();
+        console.log(dictArr);
     }
 }
 
-function create_grid(dictArray, cols=3) {
-    const container = document.getElementById("container");
-    let numItems = dictArray.length;
+let dArray = dictArray.getArr();
 
-    container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
-    container.style.setProperty('--grid-cols', cols);
-    for (c = 0; c < numItems; c++) {
-        createCell(dictArray[c], container, true)
-    };
-}
+let gridItem =  {
 
-class gridItem {
-    createCell(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
-        this.cell = document.createElement("div");
+    selectId: -1, //default: item not selected
+
+    appendOrInsert: function(isAppend, parentNode, newNode, refNode=newNode) {
+        return isAppend?parentNode.appendChild(newNode):parentNode.insertBefore(newNode, refNode);
+    },
+
+    createCell: function(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
+        let cell = document.createElement("div");
         if (idd !== "-1") {
             cell.id = idd;
         }
-        appendOrInsert(isAppend, container, this.cell, container.firstChild).className = "grid-item";
+        gridItem.appendOrInsert(isAppend, container, cell, container.firstChild).className = "grid-item";
     
         if (isDeletable) {
-            this.cellDelete = document.createElement("div");
-            this.cell.appendChild(cellDelete).className = "cell-delete button edit invisible";
+            let cellDelete = document.createElement("div");
+            cell.appendChild(cellDelete).className = "cell-delete button edit invisible";
     
-            this.cellDeleteImg = document.createElement("img");
-            this.cellDeleteImg.src = './svg/trashcan.svg';
-            this.cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button edit invisible";
+            let cellDeleteImg = document.createElement("img");
+            cellDeleteImg.src = './svg/trashcan.svg';
+            cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button edit invisible";
     
-            this.cellEdit = document.createElement("div");
-            this.cellEdit.innerHTML = "Edit";
-            this.cell.appendChild(cellEdit).className = "cell-edit text-button button edit invisible";
+            let cellEdit = document.createElement("div");
+            cellEdit.innerHTML = "Edit";
+            cell.appendChild(cellEdit).className = "cell-edit text-button button edit invisible";
         }
     
         if (hasInput) {
-            this.cellImg = document.createElement("img");
-            this.cellImg.src = dict['img'];
-            this.cell.appendChild(cellImg).className = "cell-image img";
+            let cellImg = document.createElement("img");
+            cellImg.src = dict['img'];
+            cell.appendChild(cellImg).className = "cell-image img";
     
-            this.link = document.createElement("input");
-            this.link.type = "file";
-            this.link.accept = ".jpg,.jpg,.gif,.png,.svg";
-            this.link.style = "opacity: 0";
-            this.cell.appendChild(link).classList = "cell-link";
+            let link = document.createElement("input");
+            link.type = "file";
+            link.accept = ".jpg,.jpg,.gif,.png,.svg";
+            link.style = "opacity: 0";
+            // cell.oninput = updateImg(document.getElementById(".manual-entry-cell"));
+            cell.appendChild(link).classList = "cell-link";
         }
         else {
-            this.link = document.createElement("a");
-            this.link.href = dict['link'];
-            this.cell.appendChild(link).classList = "cell-link";
+            let link = document.createElement("a");
+            link.href = dict['link'];
+            cell.appendChild(link).classList = "cell-link";
     
-            this.cellImg = document.createElement("img");
-            this.cellImg.src = dict['img'];
-            this.link.appendChild(cellImg).className = "cell-image img";
+            let cellImg = document.createElement("img");
+            cellImg.src = dict['img'];
+            link.appendChild(cellImg).className = "cell-image img";
         }
     
         if (hasInput) {
-            this.titleInput = document.createElement("input");
-            this.titleInput.value = dict['title'];
-            this.cell.appendChild(titleInput).className = "cell-title title";
+            let titleInput = document.createElement("input");
+            titleInput.value = dict['title'];
+            cell.appendChild(titleInput).className = "cell-title title";
     
-            this.price = document.createElement("input");
-            this.price.value = dict['price'];
-            this.cell.appendChild(price).className = "cell-price price";
+            let price = document.createElement("input");
+            price.value = dict['price'];
+            cell.appendChild(price).className = "cell-price price";
         }
         else {
-            this.title = document.createElement("div");
-            this.title.innerHTML = dict['title'];
-            this.cell.appendChild(title).className = "cell-title title";
+            let title = document.createElement("div");
+            title.innerHTML = dict['title'];
+            cell.appendChild(title).className = "cell-title title";
     
-            this.price = document.createElement("div");
-            this.price.innerText = dict['price'];
-            this.cell.appendChild(price).className = "cell-price price";
+            let price = document.createElement("div");
+            price.innerText = dict['price'];
+            cell.appendChild(price).className = "cell-price price";
+        }
+    },
+
+    createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
+        gridItem.createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
+        return isAppend?dictArr.push(newDict):dictArr.unshift(newDict);
+    },
+
+    edit: function(newTitle, newPrice, newLink, newImg, gridId=gridItem.selectId) {
+        let cell = document.getElementById(gridId);
+    
+        let title = cell.querySelector(".cell-title");
+        title.innerHTML = newTitle;
+    
+        let price = cell.querySelector(".cell-price");
+        price.innerHTML = newPrice;
+    
+        let link = cell.querySelector(".cell-link");
+        link.href = newLink;
+    
+        let cellImg = cell.querySelector(".cell-image");
+        cellImg.src = newImg;
+    
+        dictArray.edit(gridId, dArray);
+    },
+
+    deleteCell: function(gridId) {
+        document.getElementById(gridId).remove();
+        dictArray.deleteCell(gridId, dArray);
+    }
+
+};
+
+let grid = {
+    create_grid: function(dictArray, cols=3) {
+        const container = document.getElementById("container");
+        let numItems = dictArray.length;
+    
+        container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
+        container.style.setProperty('--grid-cols', cols);
+        for (c = 0; c < numItems; c++) {
+            gridItem.createCell(dictArray[c], container, true)
+        };
+    },
+
+    updateGridIds: function() {
+        let arrGridItem = Array.from(document.querySelectorAll(".grid-item"));
+        let idxManualEntry = arrGridItem.indexOf(document.getElementById("manual-entry-cell"));
+        (idxManualEntry >= 0)?arrGridItem.splice(idxManualEntry, 1):arrGridItem;
+    
+        for (let i = 0; i < arrGridItem.length; i++) {
+            arrGridItem[i].id = i;
         }
     }
+};
 
-    createCellInsertArray(dictArray, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
-        createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
-        return isAppend?dictArray.push(newDict):dictArray.unshift(newDict);
-    }
+grid.create_grid(dArray);
+gridItem.createCell(dArray[0], document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
 
-    appendOrInsert(isAppend, parentNode, newNode, refNode=newNode) {
-        return isAppend?parentNode.appendChild(newNode):parentNode.insertBefore(newNode, refNode);
-    }
+gridItem.createCellInsertArray(dArray, dArray[0], document.getElementById("container"));
 
-    // editGridItem(gridId, newTitle, newPrice, newLink, newImg) {
-    //     // let cell = document.getElementById(gridId);
-    
-    //     // let title = this.cell.querySelector(".cell-title");
-    //     this.title.innerHTML = newTitle;
-    
-    //     // let price = cell.querySelector(".cell-price");
-    //     this.price.innerHTML = newPrice;
-    
-    //     // let link = cell.querySelector(".cell-link");
-    //     this.link.href = newLink;
-    
-    //     // let cellImg = cell.querySelector(".cell-image");
-    //     this.cellImg.src = newImg;
-    
-    //     editDictArray(gridId, dictArray);
-    // }
-
-}
-
-function createCell(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
-    let cell = document.createElement("div");
-    if (idd !== "-1") {
-        cell.id = idd;
-    }
-    appendOrInsert(isAppend, container, cell, container.firstChild).className = "grid-item";
-
-    if (isDeletable) {
-        let cellDelete = document.createElement("div");
-        cell.appendChild(cellDelete).className = "cell-delete button edit invisible";
-
-        let cellDeleteImg = document.createElement("img");
-        cellDeleteImg.src = './svg/trashcan.svg';
-        cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button edit invisible";
-
-        let cellEdit = document.createElement("div");
-        cellEdit.innerHTML = "Edit";
-        cell.appendChild(cellEdit).className = "cell-edit text-button button edit invisible";
-    }
-
-    if (hasInput) {
-        let cellImg = document.createElement("img");
-        cellImg.src = dict['img'];
-        cell.appendChild(cellImg).className = "cell-image img";
-
-        let link = document.createElement("input");
-        link.type = "file";
-        link.accept = ".jpg,.jpg,.gif,.png,.svg";
-        link.style = "opacity: 0";
-        // cell.oninput = updateImg(document.getElementById(".manual-entry-cell"));
-        cell.appendChild(link).classList = "cell-link";
-    }
-    else {
-        let link = document.createElement("a");
-        link.href = dict['link'];
-        cell.appendChild(link).classList = "cell-link";
-
-        let cellImg = document.createElement("img");
-        cellImg.src = dict['img'];
-        link.appendChild(cellImg).className = "cell-image img";
-    }
-
-    if (hasInput) {
-        let titleInput = document.createElement("input");
-        titleInput.value = dict['title'];
-        cell.appendChild(titleInput).className = "cell-title title";
-
-        let price = document.createElement("input");
-        price.value = dict['price'];
-        cell.appendChild(price).className = "cell-price price";
-    }
-    else {
-        let title = document.createElement("div");
-        title.innerHTML = dict['title'];
-        cell.appendChild(title).className = "cell-title title";
-
-        let price = document.createElement("div");
-        price.innerText = dict['price'];
-        cell.appendChild(price).className = "cell-price price";
-    }
-}
-
-function appendOrInsert(isAppend, parentNode, newNode, refNode=newNode) {
-    return isAppend?parentNode.appendChild(newNode):parentNode.insertBefore(newNode, refNode);
-}
-
-function createCellInsertArray(dictArray, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
-    createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
-    return isAppend?dictArray.push(newDict):dictArray.unshift(newDict);
-}
-
-function editGridItem(gridId, newTitle, newPrice, newLink, newImg) {
-    let cell = document.getElementById(gridId);
-
-    let title = cell.querySelector(".cell-title");
-    title.innerHTML = newTitle;
-
-    let price = cell.querySelector(".cell-price");
-    price.innerHTML = newPrice;
-
-    let link = cell.querySelector(".cell-link");
-    link.href = newLink;
-
-    let cellImg = cell.querySelector(".cell-image");
-    cellImg.src = newImg;
-
-    editDictArray(gridId, dictArray);
-}
-
-function editEditPopup(gridId) {
-    let cell = document.getElementById(gridId);
-
-    let title = cell.querySelector(".cell-title");
-    editPopup.autoEntry.title.value = title.innerHTML;
-    editPopup.manualEntry.title().value = title.innerHTML;
-
-    let price = cell.querySelector(".cell-price");
-    editPopup.manualEntry.price().value = price.innerHTML;
-
-    let link = cell.querySelector(".cell-link");
-    editPopup.autoEntry.link.value = link.href;
-
-    let cellImg = cell.querySelector(".cell-image");
-    editPopup.manualEntry.image().src = cellImg.src;
-}
-
-function editDictArray(gridId, dictArray) {
-    let cell = document.getElementById(gridId);
-    let cellTitle = cell.querySelector(".cell-title");
-    let cellPrice = cell.querySelector(".cell-price");
-    let cellLink = cell.querySelector(".cell-link");
-    let cellImg = cell.querySelector(".cell-image");
-
-    dictArray[gridId] = {...dictArray[gridId],
-        title: cellTitle.innerHTML,
-        price: cellPrice.innerHTML,
-        link: cellLink.href,
-        img: cellImg.src
-    }
-}
-
-function deleteCellDictArray(gridId, dictArray) {
-    dictArray.splice(gridId, 1);
-    updateGridIds();
-    console.log(dictArray);
-}
-
-function deleteCell(gridId) {
-    document.getElementById(gridId).remove();
-    deleteCellDictArray(gridId, dictArray);
-}
+grid.updateGridIds();
+gridItem.edit("NewTitle", "$0", "https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array", "./svg/exit.svg", "1")
