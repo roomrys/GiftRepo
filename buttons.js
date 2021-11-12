@@ -9,15 +9,23 @@ document.addEventListener("click", event => {
            // close editor
            editPopup.visibility.toggle(false);
        }
+
         if (editItems.identityList.includes(eventId)) { 
             // hide/unhide delete and edit buttons
             editItems.visibility.toggle();
         }
         else if (eventClassList.includes("cell-edit")) { 
             // open editor and load cell
+            editPopup.isEdit = true;
             editPopup.visibility.toggle(true);
-            gridItem.selectId = event.target.parentNode.id;  // global variable for editId
-            editPopup.edit(); // edit-popup
+            gridItem.selectId = event.target.parentNode.id;
+            editPopup.edit(gridItem.selectId); // edit-popup
+        }
+        else if (eventId === "new-entry-cell") {
+            editPopup.isEdit = false;
+            gridItem.selectId = event.target.parentNode.id;            
+            editPopup.visibility.toggle(true);
+            // editPopup.edit()
         }
         else if (eventId === "save-edit-popup") {
             // edit grid item after saving editor popup

@@ -40,7 +40,23 @@ let gridItem =  {
     referenceNode: -1, // default: no reference
     selectId: -1, //default: item not selected
 
-    appendOrInsert: function(isAppend, parentNode, newNode, refNode=(this.referenceNode==-1)?container.firstElementChild:this.referenceNode.nextSibling) {
+    getDict: function(gridId=gridItem.selectId) {
+        let cell = document.getElementById(gridId);
+
+        this.dict = {...dictArray.defaultDict,
+            title: cell.querySelector(".cell-title").innerHTML,
+            price: cell.querySelector(".cell-price").innerHTML,
+            link: cell.querySelector(".cell-link").href,
+            img: cell.querySelector(".cell-image").src
+        }
+
+        console.log(this.dict)
+
+        return this.dict
+    },
+
+    appendOrInsert: function(isAppend, parentNode, newNode, 
+            refNode = (this.referenceNode==-1)?container.firstElementChild:this.referenceNode.nextSibling) {
         return isAppend?parentNode.appendChild(newNode):parentNode.insertBefore(newNode, refNode)
     },
 
@@ -181,14 +197,14 @@ let editItems = {
         createGridItem: function() {
             let newEntryDict = {...dictArray.defaultDict,
                 title: "New Entry",
-                price: "",
-                img: "./svg/plus.svg"
+                price: "$",
+                img: "./svg/plus.svg",
+                link: "javascript:void(0)"
             };
             // createCell: function(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
             gridItem.createCell(newEntryDict, container, false, false, false, "new-entry-cell");
             this.getElements();
-            this.link.href = "javascript:void(0)";
-            this.cell.classList.add("invisible", "edit");
+            this.cell.classList.add("invisible", "edit", "button");
             gridItem.referenceNode = this.cell;
         },
 
@@ -229,13 +245,36 @@ let editItems = {
 };
 
 // for edit popup
-let editPopup = {
+var editPopup = {
+    isEdit: true, // either edit entry or new entry
+
     title: document.getElementById("title-edit-popup"),
 
+    updateTitle: function() {
+        this.isEdit?(this.title.innerHTML = "Edit Entry"):(this.title.innerHTML = "New Entry")
+    },
+
+    autoEntry: {
+        title:  document.getElementById("title-auto-entry"),
+        link: document.getElementById("link-auto-entry")
+    },
+
     manualEntry: {
+        getDefaultDict: function() {
+            this.defaultDict = {...dictArray.defaultDict,
+                title: editPopup.autoEntry.title.value,
+                price: "$",
+                img: "./svg/plus.svg",
+                link: editPopup.autoEntry.link.value
+            }
+        },
+
         createGridItem: function() {
             // createCell: function(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
-            gridItem.createCell(dArray[0], document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
+            console.log(editPopup.autoEntry.title.value)
+            this.getDefaultDict();
+            console.log(editPopup.manualEntry.defaultDict)
+            gridItem.createCell(this.defaultDict, document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
             this.getElements();
         },
 
@@ -259,17 +298,14 @@ let editPopup = {
 
     },
 
-    autoEntry: {
-        title:  document.getElementById("title-auto-entry"),
-        link: document.getElementById("link-auto-entry")
-    },
-
     visibility: {
         wall: document.getElementById('wall'),
         container: document.getElementById("container"),
         closeEditorClassList: ["header", "edit-popup"],
         status: false,
-        toggle: function (isOpen=this.status) {
+        toggle: function (isOpen = this.status) {
+            editPopup.updateTitle();
+
             this.status = isOpen;
             if (this.status) {
                 this.wall.classList.remove("invisible");
@@ -284,6 +320,22 @@ let editPopup = {
 
     edit: function(gridId=gridItem.selectId) {
         editPopup.manualEntry.getElements();
+        // gridItem.dict = gridItem.getDict(gridId);
+        // console.log(gridId)
+        // console.log("gridItem.dict = " + gridItem.dict)
+    
+        // editPopup.autoEntry.title.value = gridItem.dict.title.innerHTML;
+        // editPopup.manualEntry.title.value = gridItem.dict.title.title.innerHTML;
+    
+        // let price = cell.querySelector(".cell-price");
+        // editPopup.manualEntry.price.value = price.innerHTML;
+    
+        // let link = cell.querySelector(".cell-link");
+        // editPopup.autoEntry.link.value = link.href;
+    
+        // let cellImg = cell.querySelector(".cell-image");
+        // editPopup.manualEntry.image.src = cellImg.src;
+
 
         let cell = document.getElementById(gridId);
     
