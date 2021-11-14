@@ -50,8 +50,6 @@ let gridItem =  {
             img: cell.querySelector(".cell-image").src
         }
 
-        console.log(this.dict)
-
         return this.dict
     },
 
@@ -61,7 +59,6 @@ let gridItem =  {
     },
 
     createCell: function(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
-        
         let cell = document.createElement("div");
         if (idd !== "-1") {
             cell.id = idd;
@@ -70,15 +67,20 @@ let gridItem =  {
     
         if (isDeletable) {
             let cellDelete = document.createElement("div");
-            cell.appendChild(cellDelete).className = "cell-delete button edit invisible";
+            cell.appendChild(cellDelete).className = "cell-delete button edit";
     
             let cellDeleteImg = document.createElement("img");
             cellDeleteImg.src = './svg/trashcan.svg';
-            cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button edit invisible";
+            cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button";
     
             let cellEdit = document.createElement("div");
             cellEdit.innerHTML = "Edit";
-            cell.appendChild(cellEdit).className = "cell-edit text-button button edit invisible";
+            cell.appendChild(cellEdit).className = "cell-edit text-button button edit";
+
+            if (!editItems.visibility.status) {
+                cellDelete.classList.add("invisible");
+                cellEdit.classList.add("invisible");
+            }
         }
     
         if (hasInput) {
@@ -124,23 +126,27 @@ let gridItem =  {
 
     createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
         gridItem.createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
-        return isAppend?dictArr.push(newDict):dictArr.unshift(newDict);
+        isAppend?dictArr.push(newDict):dictArr.unshift(newDict);
+        grid.updateGridIds();
     },
 
-    edit: function(newTitle, newPrice, newLink, newImg, gridId=gridItem.selectId) {
+    edit: function(gridId=gridItem.selectId) {
+        // editPopup.manualEntry.getDict();
+        editPopup.manualEntry.getDict();
+        
         let cell = document.getElementById(gridId);
     
         let title = cell.querySelector(".cell-title");
-        title.innerHTML = newTitle;
+        title.innerHTML = editPopup.manualEntry.dict.title;
     
         let price = cell.querySelector(".cell-price");
-        price.innerHTML = newPrice;
+        price.innerHTML = editPopup.manualEntry.dict.price;
     
         let link = cell.querySelector(".cell-link");
-        link.href = newLink;
+        link.href = editPopup.manualEntry.dict.link;
     
         let cellImg = cell.querySelector(".cell-image");
-        cellImg.src = newImg;
+        cellImg.src = editPopup.manualEntry.dict.img;
     
         dictArray.edit(gridId, dArray);
     },
@@ -266,14 +272,27 @@ var editPopup = {
                 price: "$",
                 img: "./svg/plus.svg",
                 link: editPopup.autoEntry.link.value
+            };
+
+            return this.defaultDict;
+        },
+
+        getDict: function() {
+            let cell = document.getElementById("manual-entry-cell");
+
+            this.dict = {...dictArray.defaultDict,
+                title: cell.querySelector(".cell-title").value,
+                price: cell.querySelector(".cell-price").value,
+                img: cell.querySelector(".cell-image").src,
+                link: document.getElementById("link-auto-entry").value
             }
+
+            return this.dict
         },
 
         createGridItem: function() {
             // createCell: function(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
-            console.log(editPopup.autoEntry.title.value)
             this.getDefaultDict();
-            console.log(editPopup.manualEntry.defaultDict)
             gridItem.createCell(this.defaultDict, document.getElementById("manual-entry"), true, false, true, "manual-entry-cell");
             this.getElements();
         },
@@ -320,36 +339,23 @@ var editPopup = {
 
     edit: function(gridId=gridItem.selectId) {
         editPopup.manualEntry.getElements();
-        // gridItem.dict = gridItem.getDict(gridId);
-        // console.log(gridId)
-        // console.log("gridItem.dict = " + gridItem.dict)
-    
-        // editPopup.autoEntry.title.value = gridItem.dict.title.innerHTML;
-        // editPopup.manualEntry.title.value = gridItem.dict.title.title.innerHTML;
-    
-        // let price = cell.querySelector(".cell-price");
-        // editPopup.manualEntry.price.value = price.innerHTML;
-    
-        // let link = cell.querySelector(".cell-link");
-        // editPopup.autoEntry.link.value = link.href;
-    
-        // let cellImg = cell.querySelector(".cell-image");
-        // editPopup.manualEntry.image.src = cellImg.src;
+        (gridId === "new-entry-cell")?(gridItem.dict = editPopup.manualEntry.getDefaultDict()):gridItem.getDict(gridId);
 
+        editPopup.autoEntry.title.value = gridItem.dict.title;
+        editPopup.manualEntry.title.value = gridItem.dict.title;
+        editPopup.manualEntry.price.value = gridItem.dict.price;
+        editPopup.autoEntry.link.value = gridItem.dict.link;
+        editPopup.manualEntry.image.src = gridItem.dict.img;
+    },
 
-        let cell = document.getElementById(gridId);
-    
-        let title = cell.querySelector(".cell-title");
-        editPopup.autoEntry.title.value = title.innerHTML;
-        editPopup.manualEntry.title.value = title.innerHTML;
-    
-        let price = cell.querySelector(".cell-price");
-        editPopup.manualEntry.price.value = price.innerHTML;
-    
-        let link = cell.querySelector(".cell-link");
-        editPopup.autoEntry.link.value = link.href;
-    
-        let cellImg = cell.querySelector(".cell-image");
-        editPopup.manualEntry.image.src = cellImg.src;
+    save: function(gridId=gridItem.selectId) {
+        if (gridId === "new-entry-cell") {
+            // createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
+            gridItem.createCellInsertArray(dArray, editPopup.manualEntry.getDict(), container)
+        }
+        else {
+            gridItem.edit(gridId)
+        }
     }
+
 }

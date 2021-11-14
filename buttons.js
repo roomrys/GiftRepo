@@ -23,17 +23,13 @@ document.addEventListener("click", event => {
         }
         else if (eventId === "new-entry-cell") {
             editPopup.isEdit = false;
-            gridItem.selectId = event.target.parentNode.id;            
+            gridItem.selectId = event.target.id; 
             editPopup.visibility.toggle(true);
-            // editPopup.edit()
+            editPopup.edit()
         }
         else if (eventId === "save-edit-popup") {
             // edit grid item after saving editor popup
-            let newTitle = editPopup.manualEntry.title.value;
-            let newPrice = editPopup.manualEntry.price.value;
-            let newLink = editPopup.autoEntry.link.value;
-            let newImg = editPopup.manualEntry.image.src;
-            gridItem.edit(newTitle, newPrice, newLink, newImg)
+            editPopup.save()
         }
         else if (eventClassList.some(classFromList => 
                 ["cell-delete", "cell-delete-img"].includes(classFromList))) {

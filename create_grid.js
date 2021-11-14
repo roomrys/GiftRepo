@@ -10,4 +10,3 @@ editItems.newEntry.createGridItem();
 // test functionality of insert
 gridItem.createCellInsertArray(dArray, dArray[0], document.getElementById("container"));
 grid.updateGridIds();
-gridItem.edit("NewTitle", "$0", "https://stackoverflow.com/questions/5767325/how-can-i-remove-a-specific-item-from-an-array", "./svg/exit.svg", "7")
