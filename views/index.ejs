@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./public/css/stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat&family=Chakra+Petch:wght@300&family=Cookie&family=Festive&family=Fruktur&family=Henny+Penny&family=Kaushan+Script&family=Lobster&family=Lobster+Two:ital,wght@1,700&family=Pacifico&family=Qahiri&family=Satisfy&family=Space+Mono&display=swap" rel="stylesheet">
+    <script src="./public/js/init.js" defer></script>
+    <script src="./public/js/create_grid.js" defer></script>
+    <script src="./public/js/buttons.js" defer></script>
+    <script src="./public/js/inputs.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+<header>
+    <div id="list-user-title" class="header button"> <%= data.userid %>'s Xmas List</div>
+    <div id="nav-menu">
+        <div id="edit-items-box" class="header nav-item-box button">
+            <div id="edit-items-button" class="header nav-item button">Edit Items</div>
+        </div>
+        <div class="header nav-item-box button">
+            <div class="header nav-item button">Planned Purchases</div>
+        </div>
+        <div class="header nav-item-box button">
+            <div class="header nav-item button">Share List</div>
+        </div>
+        <div class="header nav-item-box button">
+            <div class="header nav-item button">Switch User</div>
+        </div>
+    </div>
+</header>
+<div id="container">
+</div>
+<div id="wall" class="move-to-front invisible">
+    <div id="edit-popup" class="edit-popup">
+        <img id="exit-edit-popup" class="edit-popup button img" src="./public/svg/exit.svg"></img>
+        <div id="save-edit-popup" class="edit-popup text-button button">Save</div>
+        <div id="title-edit-popup" class="title">
+            Edit Entry
+        </div>
+        <div id="auto-entry">
+            <form>
+                <label for="title-auto-entry">Title</label>
+                <input type="text" id="title-auto-entry" name="title-auto-entry" value="Yoga Mat">
+            </form>
+            <!-- <div id="title-auto-entry"></div> -->
+            <form>
+                <label for="link-auto-entry">Amazon Link</label>
+                <input type="url" id="link-auto-entry" name="link-auto-entry" value="https://www.amazon.com/dp/B0000DZFXZ/ref=redir_mobile_desktop?_encoding=UTF8&aaxitk=25ad622efea6265a9d524c4228ea6dcb&hsa_cr_id=5758817560001&pd_rd_plhdr=t&pd_rd_r=7e54cf5c-8902-4c01-a1df-3b2d1152981a&pd_rd_w=Ab5Xj&pd_rd_wg=nTi7C&ref_=sbx_be_s_sparkle_mcd_asin_0_img">
+            </form>
+        </div>
+        <div id="or">
+            <div id="or-text" class="title">
+                PREVIEW
+            </div>
+        </div>
+        <div id="manual-entry">
+            <div id="title-manual-entry"></div>
+            <div id="cell-manual-entry"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
