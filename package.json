@@ -1,0 +1,22 @@
+{
+  "name": "xmaslist",
+  "version": "1.0.0",
+  "description": "Christmas list app for family and friends.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roomrys/XmasList.git"
+  },
+  "author": "Liezl Maree",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roomrys/XmasList/issues"
+  },
+  "homepage": "https://github.com/roomrys/XmasList#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

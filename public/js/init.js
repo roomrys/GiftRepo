@@ -1,5 +1,7 @@
+let svgPath = './public/svg/';
+
 let dictArray = {
-    defaultDict: {img: './svg/present.svg', 
+    defaultDict: {img: svgPath + '/present.svg', 
         price:'$888', 
         link:'https://codepen.io/sosuke/pen/Pjoqqp'},
 
@@ -70,7 +72,7 @@ let gridItem =  {
             cell.appendChild(cellDelete).className = "cell-delete button edit";
     
             let cellDeleteImg = document.createElement("img");
-            cellDeleteImg.src = './svg/trashcan.svg';
+            cellDeleteImg.src = svgPath + 'trashcan.svg';
             cellDelete.appendChild(cellDeleteImg).className = "cell-delete-img img button";
     
             let cellEdit = document.createElement("div");
@@ -204,7 +206,7 @@ let editItems = {
             let newEntryDict = {...dictArray.defaultDict,
                 title: "New Entry",
                 price: "$",
-                img: "./svg/plus.svg",
+                img: svgPath + "plus.svg",
                 link: "javascript:void(0)"
             };
             // createCell: function(dict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
@@ -270,7 +272,7 @@ var editPopup = {
             this.defaultDict = {...dictArray.defaultDict,
                 title: editPopup.autoEntry.title.value,
                 price: "$",
-                img: "./svg/plus.svg",
+                img: svgPath + "plus.svg",
                 link: editPopup.autoEntry.link.value
             };
 
