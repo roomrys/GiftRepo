@@ -13,40 +13,86 @@ let db = new sqlite3.Database(dbPath + dbName + '.db', (err) => {
 
 let username = 'Liezl';
 
-// db.createTable = function(tableName) {
-//     db.run(`CREATE TABLE IF NOT EXISTS ` + username + `(
-//         title TEXT PRIMARY KEY,
-//         link TEXT,
-//         image TEXT,
-//         price TEXT)`, (err) => {
-//             if (err) {
-//                 return console.log(err.message);
-//             }
-//             else
-//                 console.log(`Created table named ${username}`)
-//         })
-// };
-
-db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS ` + username + `(
+db.createTable = function(tableName) {
+    let sql = `CREATE TABLE IF NOT EXISTS ` + username + `(
         title TEXT PRIMARY KEY,
         link TEXT,
         image TEXT,
-        price TEXT)`, (err) => {
+        price TEXT)`;
+    console.log('\x1b[44m\x1b[30m%s\x1b[0m', sql);
+    return this.run(sql, (err) => {
             if (err) {
                 return console.log(err.message);
             }
             else
-                console.log(`Created table named ${username}`)
+                console.log(`Connected to table named ${username}`)
         })
-    .run(`INSERT INTO Liezl ( title,link,image,price ) 
-            values( ?, ?, ?, ? )`, ['tt', 'l', 'i', 'p'], function(err) {
+};
+
+db.insert = function(tableName, dict) {
+    let sql = `INSERT INTO ` + tableName + ` (title,link,image,price)
+        values (?,?,?,?)`;
+    console.log('\x1b[42m\x1b[30m%s\x1b[0m', sql);
+    return this.run(sql, [dict.title, dict.link, dict.image, dict.price], function(err) {
+            if (err) {
+                return console.log(err.message);
+            }
+            else
+                console.log(`A row has been inserted with rowid ${this.lastID}`);
+        })
+};
+
+let dictArr = [];
+db.read = function(tableName, rowId=-1) {
+    let sqlBase = `SELECT * FROM ${tableName}`;
+    let sql = (rowId>=0)?(sqlBase + ` WHERE rowid = '${rowId}'`):sqlBase;
+    console.log('\x1b[41m\x1b[30m%s\x1b[0m', sql);
+    return this.all(sql, [], (err, rows) => {
         if (err) {
-            return console.log(err.message);
+        throw `\t${err}`;
         }
-        else
-            console.log(`A row has been inserted with rowid ${this.lastID}`);
+        else {
+            dictArr.splice(0, dictArr.length);
+            console.log('dict Arr = ', dictArr);
+            rows.forEach((row) => {
+                dictArr.push({title: row.title, link: row.link, image: row.image, price: row.price});
+            });
+            console.log(dictArr);
+        }
+  });
+};
+
+db.update = function(tableName, rowId, newDict) {
+    let sql = `UPDATE ${tableName}
+         SET (title,link,image,price) = (?,?,?,?)
+         WHERE rowid = ${rowId}`;
+    console.log('\x1b[43m\x1b[30m%s\x1b[0m', sql);
+    return this.run(sql, [newDict.title, newDict.link, newDict.image, newDict.price], (err) => {
+        if (err) {
+            console.log(err);
+        }
+  });
+};
+
+db.deleteTable = function(tableName) {
+    let sql = `DROP TABLE ${tableName}`;
+    console.log('\x1b[45m\x1b[30m%s\x1b[0m', sql);
+    return this.run(sql, [], (err) => {
+        if (err) {
+            console.log(err);
+        }
     })
+}
+
+db.serialize(() => {
+    db.createTable(username)
+    .read(username)
+    .insert(username, {title: "NEW title", link: "new link", image: "new image", price: "new price"})
+    .insert(username, {title: "NEW1 title", link: "new1 link", image: "new1 image", price: "new price"})
+    .read(username)
+    .update(username, 2, {title: "title", link: "link", image: "image", price: "price"})
+    .read(username)
+    .deleteTable(username)
 });
 
 db.close((err) => {
@@ -56,6 +102,7 @@ db.close((err) => {
     else
         console.log('Close the database connection.');
 });
+
 
 // start localhost
 const express = require('express');
