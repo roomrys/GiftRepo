@@ -1,28 +1,8 @@
 // dbase.js: deal with databases
 const sqlite3 = require('sqlite3').verbose();
 
-// connect to database
-let dbPath = './db/';
-let dbName = 'xmaslist';
-db = connectDB(dbPath, dbName);
-
-// 
-let dictArr = [];
-db.connectedTable = '';
-let username = 'Liezl';
-
 // database functions
-function connectDB(dbPath, dbName) {
-    return new sqlite3.Database(dbPath + dbName + '.db', (err) => {
-        if (err) {
-            console.error(err.message);
-        }
-        else
-            console.log('Connected to the ' + dbName + ' database.');
-    });
-};
-
-db.createTable = function(tableName) {
+sqlite3.Database.prototype.createTable = function(tableName) {
     let sql = `CREATE TABLE IF NOT EXISTS ` + tableName + `(
         id INTEGER,
         title TEXT,
@@ -35,14 +15,13 @@ db.createTable = function(tableName) {
                 return console.log(err.message);
             }
             else {
-                db.connectedTable = tableName;                
-                console.log(db.connectedTable)
-                console.log('\x1b[34m%s\x1b[0m', `Connected to table named ${username}`)
+                db.connectedTable = tableName;
+                console.log('\x1b[34m%s\x1b[0m', `Connected to table named ${tableName}`)
             }
         }).read(tableName)
 };
 
-db.insert = function(dict, tableName) {
+sqlite3.Database.prototype.insert = function(dict, tableName) {
     let sql = `INSERT INTO ` + tableName + ` (id,title,link,image,price)
         values (?,?,?,?,?)`;
     console.log('\x1b[46m\x1b[30m%s\x1b[0m', sql);
@@ -58,7 +37,7 @@ db.insert = function(dict, tableName) {
         }).read(tableName)
 };
 
-db.read = function(tableName, rowId=-1) {
+sqlite3.Database.prototype.read = function(tableName, rowId=-1) {
     let sqlBase = `SELECT rowid,* FROM ${tableName} ORDER BY id`;
     let sql = (rowId>=0)?(sqlBase + ` WHERE rowid = '${rowId}'`):sqlBase;
     console.log('\x1b[41m\x1b[30m%s\x1b[0m', sql);
@@ -67,17 +46,17 @@ db.read = function(tableName, rowId=-1) {
         throw `\t${err}`;
         }
         else {
-            dictArr.splice(0, dictArr.length);
+            this.dictArr = [];
             rows.forEach((row) => {
-                dictArr.push(row); //(({title, price, image, link})=>({title, price, image, link}))(row));
+                this.dictArr.push(row); //(({title, price, image, link})=>({title, price, image, link}))(row));
             });
             console.log('\x1b[31m%s\x1b[0m', 'dict Arr =');
-            console.log(dictArr);
+            console.log(this.dictArr);
         }
   });
 };
 
-db.update = function(tableName, ID, newDict) {
+sqlite3.Database.prototype.update = function(tableName, ID, newDict) {
     let sql = `UPDATE ${tableName}
          SET (title,link,image,price) = (?,?,?,?)
          WHERE id = ${ID}`;
@@ -91,7 +70,7 @@ db.update = function(tableName, ID, newDict) {
   }).read(tableName);
 };
 
-db.shiftIds = function(tableName) {
+sqlite3.Database.prototype.shiftIds = function(tableName) {
     // let tableName = this.connectedTable;
     let sql = `UPDATE ${tableName}
          SET id = id + 1
@@ -106,7 +85,7 @@ db.shiftIds = function(tableName) {
   });
 };
 
-db.deleteTable = function(tableName) {
+sqlite3.Database.prototype.deleteTable = function(tableName) {
     let sql = `DROP TABLE ${tableName}`;
     console.log('\x1b[45m\x1b[30m%s\x1b[0m', sql);
     return this.run(sql, [], (err) => {
@@ -118,7 +97,7 @@ db.deleteTable = function(tableName) {
     })
 };
 
-db.closeDB = function() {
+sqlite3.Database.prototype.closeDB = function() {
     this.close((err) => {
         if (err) {
             return console.error(err.message);
@@ -128,26 +107,48 @@ db.closeDB = function() {
         })
     };
 
-db.example = function(tableName) {
-    db.serialize(() => {
-        db.createTable(tableName)
-        // .read(username)
+sqlite3.Database.prototype.example = function(tableName) {
+    this.serialize(() => {
+        this.createTable(tableName)
+        // .read(tableName)
         
-        // .shiftIds(username)
+        // .shiftIds(tableName)
         .insert({title: "title1", link: "link1", image: "image1", price: "price1"}, tableName)
-        // .read(username)
+        // .read(tableName)
         
-        // .shiftIds(username)
+        // .shiftIds(tableName)
         .insert({title: "title2", link: "link2", image: "image2", price: "price2"}, tableName)
-        // .read(username)
+        // .read(tableName)
         
         .update(tableName, 2, {title: "updated_title", link: "updated_link", image: "updated_image", price: "updated_price"})
-        // .read(username)
+        // .read(tableName)
         
         .deleteTable(tableName)
     });
-    db.closeDB();
+    this.closeDB();
 };
 
-// database example
-db.example(username);
+function connectDB(dbPath, dbName) {
+    return new sqlite3.Database(dbPath + dbName + '.db', (err) => {
+        if (err) {
+            console.error(err.message);
+        }
+        else
+            console.log('Connected to the ' + dbName + ' database.');
+    });
+};
+
+// export function
+module.exports.connectDB = connectDB;
+
+// UNCOMMENT CODE BELOW TO RUN EXAMPLE in dbase.js
+// // connect to database
+// let dbPath = './db/';
+// let dbName = 'xmaslist';
+// db = connectDB(dbPath, dbName);
+
+// // variables needed
+// let username = 'Liezl';
+
+// // database example
+// db.example(username);
