@@ -9,5 +9,5 @@ editPopup.manualEntry.createGridItem();
 editItems.newEntry.createGridItem();
 
 // test functionality of insert
-gridItem.createCellInsertArray(dictArray.array[0], document.getElementById("container"));
-grid.updateGridIds();
+// gridItem.createCellInsertArray(dictArray.array[0], document.getElementById("container"));
+// grid.updateGridIds();

@@ -8,12 +8,16 @@ let dictArray = {
         link:'https://codepen.io/sosuke/pen/Pjoqqp'},
 
     getArr: function(_callBack) { // pull this value from database
-        // fetch('http://localhost:3000/getDictArray').then(res => res.json()).then(data => {dictArray.array = data.dictArr}).then(_callBack);
-        dictArray.array = [];
-        for (let i = 0; i<11; i++) {
-            dictArray.array[i] = {...dictArray.defaultDict, title: "Title " + i}
-        };
-        _callBack();
+        fetch('http://localhost:3000/getDictArray')
+        .then(res => res.json())
+        .then(data => {
+            dictArray.array = data;
+            _callBack();
+        })
+        // dictArray.array = [];
+        // for (let i = 0; i<11; i++) {
+        //     dictArray.array[i] = {...dictArray.defaultDict, title: "Title " + i}
+        // };
         return
     },
 
@@ -180,7 +184,7 @@ let grid = {
 
     create_grid: function(cols=3) {
         let numItems = dictArray.array.length;
-    
+        console.log(dictArray.array);
         container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
         container.style.setProperty('--grid-cols', cols);
         for (c = 0; c < numItems; c++) {

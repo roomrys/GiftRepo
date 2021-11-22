@@ -12,18 +12,26 @@ db = dbase.connectDB(dbPath, dbName);
 
 // middleware
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/user:userid', function(req, res, next) {
+    // db.createTable(req.params.userid); //sets db.connectedTable and db.dictArr
+    // db.connectedTable = req.params.userid; //
+    db.dictArr = {img: './public/svg/present.svg', 
+        price:'$888', 
+        link:'https://codepen.io/sosuke/pen/Pjoqqp',
+        title: 'T'}
+    next();
+});
 
 // set template
 app.set('view engine', 'ejs');
 
 // http requests
 app.get('/user:userid', function(req, res) {
-    db.createTable(req.params.userid);
-    db.connectedTable = req.params.userid;
-    db.dictArr = db.read(req.params.userid);
-    // db.example(db.connectedTable);
-    
     res.render('index', {data : {userid: req.params.userid}});
+});
+app.get('/getDictArray', function(req, res) {
+    console.log(db.dictArr)
+    res.send(db.dictArr)
 });
 
 app.listen(port, () => {
