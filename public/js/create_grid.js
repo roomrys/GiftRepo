@@ -1,5 +1,6 @@
 // create grid based on database
-grid.create_grid(dArray);
+dictArray.getArr(grid.create_grid);
+console.log(dictArray.array)
 
 // create grid item for manual entry
 editPopup.manualEntry.createGridItem();
@@ -8,5 +9,5 @@ editPopup.manualEntry.createGridItem();
 editItems.newEntry.createGridItem();
 
 // test functionality of insert
-gridItem.createCellInsertArray(dArray, dArray[0], document.getElementById("container"));
+gridItem.createCellInsertArray(dictArray.array[0], document.getElementById("container"));
 grid.updateGridIds();

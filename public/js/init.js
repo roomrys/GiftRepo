@@ -1,26 +1,30 @@
 let svgPath = './public/svg/';
 
 let dictArray = {
+    array: [], // use getArr to pull array from database
+
     defaultDict: {img: svgPath + '/present.svg', 
         price:'$888', 
         link:'https://codepen.io/sosuke/pen/Pjoqqp'},
 
-    getArr: function() { // pull this value from database
-        let array = [];
+    getArr: function(_callBack) { // pull this value from database
+        // fetch('http://localhost:3000/getDictArray').then(res => res.json()).then(data => {dictArray.array = data.dictArr}).then(_callBack);
+        dictArray.array = [];
         for (let i = 0; i<11; i++) {
-            array[i] = {...dictArray.defaultDict, title: "Title " + i}
+            dictArray.array[i] = {...dictArray.defaultDict, title: "Title " + i}
         };
-        return array
+        _callBack();
+        return
     },
 
-    edit(gridId, dictArr) {
+    edit(gridId) {
         let cell = document.getElementById(gridId);
         let cellTitle = cell.querySelector(".cell-title");
         let cellPrice = cell.querySelector(".cell-price");
         let cellLink = cell.querySelector(".cell-link");
         let cellImg = cell.querySelector(".cell-image");
     
-        dictArr[gridId] = {...dictArr[gridId],
+        dictArray.array[gridId] = {...dictArray.array[gridId],
             title: cellTitle.innerHTML,
             price: cellPrice.innerHTML,
             link: cellLink.href,
@@ -28,14 +32,13 @@ let dictArray = {
         }
     },
 
-    deleteCell(gridId, dictArr) {
-        dictArr.splice(gridId, 1);
+    deleteCell(gridId) {
+        dictArray.array.splice(gridId, 1);
         grid.updateGridIds();
-        console.log(dictArr);
+        console.log(dictArray.array);
     }
 }
 
-let dArray = dictArray.getArr();
 const container = document.getElementById("container");
 
 let gridItem =  {
@@ -126,9 +129,9 @@ let gridItem =  {
         }
     },
 
-    createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
+    createCellInsertArray: function(newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
         gridItem.createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
-        isAppend?dictArr.push(newDict):dictArr.unshift(newDict);
+        isAppend?dictArray.array.push(newDict):dictArray.array.unshift(newDict);
         grid.updateGridIds();
     },
 
@@ -150,12 +153,12 @@ let gridItem =  {
         let cellImg = cell.querySelector(".cell-image");
         cellImg.src = editPopup.manualEntry.dict.img;
     
-        dictArray.edit(gridId, dArray);
+        dictArray.edit(gridId, dictArray.array);
     },
 
     deleteCell: function(gridId) {
         document.getElementById(gridId).remove();
-        dictArray.deleteCell(gridId, dArray);
+        dictArray.deleteCell(gridId, dictArray.array);
     }
 
 };
@@ -175,13 +178,13 @@ let grid = {
         },
     },
 
-    create_grid: function(dictArray, cols=3) {
-        let numItems = dictArray.length;
+    create_grid: function(cols=3) {
+        let numItems = dictArray.array.length;
     
         container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
         container.style.setProperty('--grid-cols', cols);
         for (c = 0; c < numItems; c++) {
-            gridItem.createCell(dictArray[c], container, true)
+            gridItem.createCell(dictArray.array[c], container, true)
         };
     },
 
@@ -353,7 +356,7 @@ var editPopup = {
     save: function(gridId=gridItem.selectId) {
         if (gridId === "new-entry-cell") {
             // createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
-            gridItem.createCellInsertArray(dArray, editPopup.manualEntry.getDict(), container)
+            gridItem.createCellInsertArray(editPopup.manualEntry.getDict(), container)
         }
         else {
             gridItem.edit(gridId)

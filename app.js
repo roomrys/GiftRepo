@@ -10,8 +10,13 @@ let dbPath = './db/';
 let dbName = 'xmaslist';
 db = dbase.connectDB(dbPath, dbName);
 
+// middleware
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// set template
 app.set('view engine', 'ejs');
+
+// http requests
 app.get('/user:userid', function(req, res) {
     db.createTable(req.params.userid);
     db.connectedTable = req.params.userid;
