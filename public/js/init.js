@@ -35,6 +35,16 @@ let dictArray = {
             link: cellLink.href,
             img: cellImg.src
         }
+        console.log()
+
+        fetch('/editDictArray', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({id: -(-gridId-1), dict: dictArray.array[gridId]})
+            })
     },
 
     add(newDict, isAppend=false) {
@@ -197,16 +207,6 @@ let grid = {
         },
     },
 
-    create_grid: function(cols=3) {
-        let numItems = dictArray.array.length;
-        console.log(dictArray.array);
-        container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
-        container.style.setProperty('--grid-cols', cols);
-        for (c = 0; c < numItems; c++) {
-            gridItem.createCell(dictArray.array[c], container, true)
-        };
-    },
-
     updateGridIds: function() {
         let gridElements = grid.elements();
 
@@ -216,6 +216,17 @@ let grid = {
         for (let i = 0; i < gridElements.length; i++) {
             gridElements[i].id = i;
         }
+    },
+
+    create_grid: function(cols=3) {
+        let numItems = dictArray.array.length;
+        console.log(dictArray.array);
+        container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
+        container.style.setProperty('--grid-cols', cols);
+        for (c = 0; c < numItems; c++) {
+            gridItem.createCell(dictArray.array[c], container, true)
+        };
+        grid.updateGridIds();
     }
 };
 
@@ -292,10 +303,10 @@ var editPopup = {
     manualEntry: {
         getDefaultDict: function() {
             this.defaultDict = {...dictArray.defaultDict,
-                title: editPopup.autoEntry.title.value,
+                title: 'Yoga Mat',
                 price: "$",
                 img: svgPath + "plus.svg",
-                link: editPopup.autoEntry.link.value
+                link: 'https://www.amazon.com/dp/B08H21593X?pd_rd_i=B08H21593X&pd_rd_w=SmSAp&pf_rd_p=7ea8e9d0-fed1-49e8-a002-f2d3f5cb151d&pd_rd_wg=RKJxO&pf_rd_r=56KTZEVETN0NGXEF63AN&pd_rd_r=80c37d9f-09b9-4dcd-a348-bc757d19765c'
             };
 
             return this.defaultDict;

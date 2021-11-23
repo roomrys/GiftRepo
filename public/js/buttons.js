@@ -23,7 +23,7 @@ document.addEventListener("click", event => {
         }
         else if (eventId === "new-entry-cell") {
             editPopup.isEdit = false;
-            gridItem.selectId = event.target.id; 
+            gridItem.selectId = event.target.id;
             editPopup.visibility.toggle(true);
             editPopup.edit()
         }

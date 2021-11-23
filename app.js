@@ -39,7 +39,11 @@ app.get('/getDictArray', function(req, res) {
 app.post('/addDictArray', function(req, res) {
     db.insert(req.body, db.connectedTable);
 });
+app.post('/editDictArray', function(req, res) {
+    db.update(db.connectedTable, req.body.id, req.body.dict);
+});
 
+// server listens for requests on port
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 });
