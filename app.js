@@ -11,6 +11,7 @@ let dbName = 'xmaslist';
 db = dbase.connectDB(dbPath, dbName);
 
 // middleware
+app.use(express.json()); // needed to read json in body of request
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/user:userid', function(req, res, next) {
     db.createTable(req.params.userid); //sets db.connectedTable and db.dictArr
@@ -34,6 +35,9 @@ app.get('/user:userid', function(req, res) {
 });
 app.get('/getDictArray', function(req, res) {
     res.send(db.dictArr)
+});
+app.post('/addDictArray', function(req, res) {
+    db.insert(req.body, db.connectedTable);
 });
 
 app.listen(port, () => {

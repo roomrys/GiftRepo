@@ -9,12 +9,12 @@ let dictArray = {
 
     getArr: function(_callBack1, _callBack2) { // read from database
         fetch('/getDictArray')
-        .then(res => res.json())
-        .then(data => {
-            dictArray.array = data;
-            _callBack1();
-            _callBack2();
-        })
+            .then(res => res.json())
+            .then(data => {
+                dictArray.array = data;
+                _callBack1();
+                _callBack2();
+            })
         // dictArray.array = [];
         // for (let i = 0; i<11; i++) {
         //     dictArray.array[i] = {...dictArray.defaultDict, title: "Title " + i}
@@ -40,7 +40,14 @@ let dictArray = {
     add(newDict, isAppend=false) {
         isAppend?dictArray.array.push(newDict):dictArray.array.unshift(newDict);
         console.log(dictArray.array)
-        // fetch('/addDictArray')
+        fetch('/addDictArray', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify(dictArray.array[0])
+            })
     },
 
     deleteCell(gridId) {
