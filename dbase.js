@@ -7,7 +7,7 @@ sqlite3.Database.prototype.createTable = function(tableName) {
         id INTEGER,
         title TEXT,
         link TEXT,
-        image TEXT,
+        img TEXT,
         price TEXT)`;
     console.log('\x1b[44m\x1b[30m%s\x1b[0m', sql);
     return this.run(sql, (err) => {
@@ -22,10 +22,10 @@ sqlite3.Database.prototype.createTable = function(tableName) {
 };
 
 sqlite3.Database.prototype.insert = function(dict, tableName) {
-    let sql = `INSERT INTO ` + tableName + ` (id,title,link,image,price)
+    let sql = `INSERT INTO ` + tableName + ` (id,title,link,img,price)
         values (?,?,?,?,?)`;
     console.log('\x1b[46m\x1b[30m%s\x1b[0m', sql);
-    return this.shiftIds(tableName).run(sql, [1, dict.title, dict.link, dict.image, dict.price], function(err) {
+    return this.shiftIds(tableName).run(sql, [1, dict.title, dict.link, dict.img, dict.price], function(err) {
             if (err) {
                 return console.log(err.message);
             }
@@ -48,7 +48,7 @@ sqlite3.Database.prototype.read = function(tableName, rowId=-1) {
         else {
             this.dictArr = [];
             rows.forEach((row) => {
-                this.dictArr.push(row); //(({title, price, image, link})=>({title, price, image, link}))(row));
+                this.dictArr.push((({title, price, img, link})=>({title, price, img, link}))(row));
             });
             console.log('\x1b[31m%s\x1b[0m', 'dict Arr =');
             console.log(this.dictArr);
@@ -58,10 +58,10 @@ sqlite3.Database.prototype.read = function(tableName, rowId=-1) {
 
 sqlite3.Database.prototype.update = function(tableName, ID, newDict) {
     let sql = `UPDATE ${tableName}
-         SET (title,link,image,price) = (?,?,?,?)
+         SET (title,link,img,price) = (?,?,?,?)
          WHERE id = ${ID}`;
     console.log('\x1b[43m\x1b[30m%s\x1b[0m', sql);
-    return this.run(sql, [newDict.title, newDict.link, newDict.image, newDict.price], (err) => {
+    return this.run(sql, [newDict.title, newDict.link, newDict.img, newDict.price], (err) => {
         if (err) {
             console.log(err);
         }
@@ -113,14 +113,14 @@ sqlite3.Database.prototype.example = function(tableName) {
         // .read(tableName)
         
         // .shiftIds(tableName)
-        .insert({title: "title1", link: "link1", image: "image1", price: "price1"}, tableName)
+        .insert({title: "title1", link: "link1", img: "image1", price: "price1"}, tableName)
         // .read(tableName)
         
         // .shiftIds(tableName)
-        .insert({title: "title2", link: "link2", image: "image2", price: "price2"}, tableName)
+        .insert({title: "title2", link: "link2", img: "image2", price: "price2"}, tableName)
         // .read(tableName)
         
-        .update(tableName, 2, {title: "updated_title", link: "updated_link", image: "updated_image", price: "updated_price"})
+        .update(tableName, 2, {title: "updated_title", link: "updated_link", img: "updated_img", price: "updated_price"})
         // .read(tableName)
         
         .deleteTable(tableName)

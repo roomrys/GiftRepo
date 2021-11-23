@@ -7,12 +7,13 @@ let dictArray = {
         price:'$888', 
         link:'https://codepen.io/sosuke/pen/Pjoqqp'},
 
-    getArr: function(_callBack) { // pull this value from database
-        fetch('http://localhost:3000/getDictArray')
+    getArr: function(_callBack1, _callBack2) { // read from database
+        fetch('/getDictArray')
         .then(res => res.json())
         .then(data => {
             dictArray.array = data;
-            _callBack();
+            _callBack1();
+            _callBack2();
         })
         // dictArray.array = [];
         // for (let i = 0; i<11; i++) {
@@ -34,6 +35,12 @@ let dictArray = {
             link: cellLink.href,
             img: cellImg.src
         }
+    },
+
+    add(newDict, isAppend=false) {
+        isAppend?dictArray.array.push(newDict):dictArray.array.unshift(newDict);
+        console.log(dictArray.array)
+        // fetch('/addDictArray')
     },
 
     deleteCell(gridId) {
@@ -135,7 +142,8 @@ let gridItem =  {
 
     createCellInsertArray: function(newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1") {
         gridItem.createCell(newDict, container, isAppend, isDeletable, hasInput, idd);
-        isAppend?dictArray.array.push(newDict):dictArray.array.unshift(newDict);
+        // isAppend?dictArray.array.push(newDict):dictArray.array.unshift(newDict);
+        dictArray.add(newDict, isAppend);
         grid.updateGridIds();
     },
 
