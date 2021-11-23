@@ -35,7 +35,6 @@ let dictArray = {
             link: cellLink.href,
             img: cellImg.src
         }
-        console.log()
 
         fetch('/editDictArray', {
             method: 'POST',
@@ -64,6 +63,15 @@ let dictArray = {
         dictArray.array.splice(gridId, 1);
         grid.updateGridIds();
         console.log(dictArray.array);
+
+        fetch('/deleteRowDictArray', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+            body: JSON.stringify({id: -(-gridId-1)})
+            })
     }
 }
 

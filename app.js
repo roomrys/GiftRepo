@@ -32,15 +32,20 @@ app.set('view engine', 'ejs');
 // http requests
 app.get('/user:userid', function(req, res) {
     res.render('index', {data : {userid: req.params.userid}});
+    db.read(req.params.userid, -1, true);
 });
 app.get('/getDictArray', function(req, res) {
     res.send(db.dictArr)
 });
 app.post('/addDictArray', function(req, res) {
-    db.insert(req.body, db.connectedTable);
+    db.insert(req.body, db.connectedTable, true);
 });
 app.post('/editDictArray', function(req, res) {
-    db.update(db.connectedTable, req.body.id, req.body.dict);
+    db.update(db.connectedTable, req.body.id, req.body.dict, true);
+});
+app.post('/deleteRowDictArray', function(req, res) {
+    console.log(req.body)
+    db.deleteRow(db.connectedTable, req.body.id, true);
 });
 
 // server listens for requests on port
