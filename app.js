@@ -4,6 +4,17 @@ const path = require('path');
 const app = express();
 const port = 3000;
 const dbase = require('./dbase.js'); // database stuff
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'uploads'));
+    },
+    filename: (req, file, cb) => {
+        const { originalname } = file;
+        cb(null, originalname);
+    }
+});
+const upload = multer({ storage });
 
 // connect to database
 let dbPath = './db/';
@@ -12,17 +23,10 @@ db = dbase.connectDB(dbPath, dbName);
 
 // middleware
 app.use(express.json()); // needed to read json in body of request
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/user:userid', function(req, res, next) {
     db.createTable(req.params.userid); //sets db.connectedTable and db.dictArr
-    // db.insert( 
-    //     {title: 'T',
-    //     link:'https://codepen.io/sosuke/pen/Pjoqqp',
-    //     img: './public/svg/present.svg', 
-    //     price:'$888'}, 
-    //     req.params.userid);
-    // db.deleteTable(req.params.userid)
-    // db.example(req.params.userid)
     next();
 });
 
@@ -46,6 +50,10 @@ app.post('/editDictArray', function(req, res) {
 app.post('/deleteRowDictArray', function(req, res) {
     console.log(req.body)
     db.deleteRow(db.connectedTable, req.body.id, true);
+});
+app.post('/uploadImg', upload.single('fileToUpload'), function(req, res) {
+    console.log('fetched /uploadImg')
+    // return res.formData = req.body;
 });
 
 // server listens for requests on port

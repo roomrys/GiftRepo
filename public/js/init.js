@@ -131,6 +131,7 @@ let gridItem =  {
     
             let link = document.createElement("input");
             link.type = "file";
+            link.name = "fileToUpload";
             link.accept = ".jpg,.jpg,.gif,.png,.svg";
             link.style = "opacity: 0";
             cell.appendChild(link).classList = "cell-link";
@@ -228,7 +229,6 @@ let grid = {
 
     create_grid: function(cols=3) {
         let numItems = dictArray.array.length;
-        console.log(dictArray.array);
         container.style.setProperty('--grid-rows', Math.ceil(numItems / cols));
         container.style.setProperty('--grid-cols', cols);
         for (c = 0; c < numItems; c++) {
@@ -355,7 +355,13 @@ var editPopup = {
 
         updateImage: function() {
             this.getElements();
-            this.image.src = URL.createObjectURL(editPopup.manualEntry.link.files[0])
+            // let downloadLink = document.createElement('a');
+            // downloadLink.href = URL.createObjectURL(editPopup.manualEntry.link.files[0]);
+            // downloadLink.upload = "../upload/img.png";
+            // document.body.append(downloadLink);
+            // downloadLink.click();
+            // document.body.removeChild(downloadLink);
+            this.image.src = URL.createObjectURL(editPopup.manualEntry.link.files[0]);
         }
 
     },
@@ -392,13 +398,32 @@ var editPopup = {
     },
 
     save: function(gridId=gridItem.selectId) {
-        if (gridId === "new-entry-cell") {
-            // createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
-            gridItem.createCellInsertArray(editPopup.manualEntry.getDict(), container)
-        }
-        else {
-            gridItem.edit(gridId)
-        }
+        // revoke url object
+        // editPopup.manualEntry.getElements();
+        // URL.revokeObjectURL(editPopup.manualEntry.image.src);
+
+        // save uploaded image (must be FormData to use multer)
+        const fd = new FormData();
+        fd.append(editPopup.manualEntry.link.name, editPopup.manualEntry.link.files[0]);
+        fetch('/uploadImg', {
+            method: 'POST',
+            body: fd
+            }).then(response => {
+                response.json();
+            }).then(success => {
+                console.log(success);
+            });
+
+            // need dynamic name returned from fetch, but promise stays 'pending'
+            editPopup.manualEntry.image.src = `/uploads/present.svg`;
+            // edit/append-to the grid
+            if (gridId === "new-entry-cell") {
+                // createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")
+                gridItem.createCellInsertArray(editPopup.manualEntry.getDict(), container)
+            }
+            else {
+                gridItem.edit(gridId)
+            }
     }
 
 }

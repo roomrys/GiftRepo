@@ -4,7 +4,6 @@ dictArray.getArr(grid.create_grid, function() {
         editItems.visibility.toggle();
     }
 });
-console.log(dictArray.array)
 
 // create grid item for manual entry
 editPopup.manualEntry.createGridItem();
