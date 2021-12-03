@@ -398,9 +398,21 @@ var editPopup = {
     },
 
     save: function(gridId=gridItem.selectId) {
-        // revoke url object
-        // editPopup.manualEntry.getElements();
-        // URL.revokeObjectURL(editPopup.manualEntry.image.src);
+
+        // if not select new image, then update file list anyway
+        let imagePath = editPopup.manualEntry.image.src;
+        if (imagePath.slice(0, 4) == 'blob') {
+            // revoke url object
+            editPopup.manualEntry.getElements();
+            URL.revokeObjectURL(editPopup.manualEntry.image.src);
+        }
+        else {
+            let imageName = imagePath.substring(imagePath.lastIndexOf('/')+1);
+            let newList = new DataTransfer();
+            let filesToAdd = new File([imagePath], imageName);
+            newList.items.add(filesToAdd);
+            editPopup.manualEntry.link.files = newList.files;
+        }
 
         // save uploaded image (must be FormData to use multer)
         const fd = new FormData();
@@ -415,7 +427,9 @@ var editPopup = {
             });
 
             // need dynamic name returned from fetch, but promise stays 'pending'
-            editPopup.manualEntry.image.src = `/uploads/present.svg`;
+            editPopup.manualEntry.image.src = `/uploads/${editPopup.manualEntry.link.files[0].name}`;
+            console.log(editPopup.manualEntry.image.src);
+
             // edit/append-to the grid
             if (gridId === "new-entry-cell") {
                 // createCellInsertArray: function(dictArr, newDict, container, isAppend=false, isDeletable=true, hasInput=false, idd="-1")

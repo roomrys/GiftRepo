@@ -1,42 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./public/css/stylesheet.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat&family=Chakra+Petch:wght@300&family=Cookie&family=Festive&family=Fruktur&family=Henny+Penny&family=Kaushan+Script&family=Lobster&family=Lobster+Two:ital,wght@1,700&family=Pacifico&family=Qahiri&family=Satisfy&family=Space+Mono&display=swap" rel="stylesheet">
-    <script src="./public/js/init.js" defer></script>
-    <script src="./public/js/create_grid.js" defer></script>
-    <script src="./public/js/buttons.js" defer></script>
-    <script src="./public/js/inputs.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&amp;family=Caveat&amp;family=Chakra+Petch:wght@300&amp;family=Cookie&amp;family=Festive&amp;family=Fruktur&amp;family=Henny+Penny&amp;family=Kaushan+Script&amp;family=Lobster&amp;family=Lobster+Two:ital,wght@1,700&amp;family=Pacifico&amp;family=Qahiri&amp;family=Satisfy&amp;family=Space+Mono&amp;display=swap" rel="stylesheet">
+    <script src="./public/js/init.js" defer=""></script>
+    <script src="./public/js/create_grid.js" defer=""></script>
+    <script src="./public/js/buttons.js" defer=""></script>
+    <script src="./public/js/inputs.js" defer=""></script>
     <title>Document</title>
 </head>
 <body>
 <header>
-    <div id="list-user-title" class="header button">User's Xmas List</div>
-    <div id="nav-menu">
-        <div id="edit-items-box" class="header nav-item-box button">
-            <div id="edit-items-button" class="header nav-item button">Edit Items</div>
-        </div>
-        <div class="header nav-item-box button">
-            <div class="header nav-item button">Planned Purchases</div>
-        </div>
-        <div class="header nav-item-box button">
-            <div class="header nav-item button">Share List</div>
-        </div>
-        <div class="header nav-item-box button">
-            <div class="header nav-item button">Switch User</div>
-        </div>
-    </div>
+    <div id="list-user-title" class="header button"> Liezl's Xmas List</div>
+    
 </header>
-<div id="container">
-</div>
+<div id="container" style="--grid-rows: 1; --grid-cols: 3;">
+<div id="new-entry-cell" class="grid-item invisible edit button"><a href="javascript:void(0)" class="cell-link"><img src="./public/svg/plus.svg" class="cell-image img"></a><div class="cell-title title">New Entry</div><div class="cell-price price">$</div></div><div id="new-entry-cell" class="grid-item invisible edit button"><a href="javascript:void(0)" class="cell-link"><img src="./public/svg/plus.svg" class="cell-image img"></a><div class="cell-title title">New Entry</div><div class="cell-price price">$</div></div><div class="grid-item" id="0"><div class="cell-delete button edit invisible"><img src="./public/svg/trashcan.svg" class="cell-delete-img img button"></div><div class="cell-edit text-button button edit invisible">Edit</div><a href="https://www.amazon.com/dp/B08H21593X?pd_rd_i=B08H21593X&amp;pd_rd_w=SmSAp&amp;pf_rd_p=7ea8e9d0-fed1-49e8-a002-f2d3f5cb151d&amp;pd_rd_wg=RKJxO&amp;pf_rd_r=56KTZEVETN0NGXEF63AN&amp;pd_rd_r=80c37d9f-09b9-4dcd-a348-bc757d19765c" class="cell-link"><img src="./uploads/present.svg" class="cell-image img"></a><div class="cell-title title">can</div><div class="cell-price price">$33</div></div></div>
 <div id="wall" class="move-to-front invisible">
     <div id="edit-popup" class="edit-popup">
-        <img id="exit-edit-popup" class="edit-popup button img" src="./public/svg/exit.svg"></img>
+        <img id="exit-edit-popup" class="edit-popup button img" src="./public/svg/exit.svg">
         <div id="save-edit-popup" class="edit-popup text-button button">Save</div>
         <div id="title-edit-popup" class="title">
             Edit Entry
@@ -49,7 +34,7 @@
             <!-- <div id="title-auto-entry"></div> -->
             <form>
                 <label for="link-auto-entry">Amazon Link</label>
-                <input type="url" id="link-auto-entry" name="link-auto-entry" value="https://www.amazon.com/dp/B0000DZFXZ/ref=redir_mobile_desktop?_encoding=UTF8&aaxitk=25ad622efea6265a9d524c4228ea6dcb&hsa_cr_id=5758817560001&pd_rd_plhdr=t&pd_rd_r=7e54cf5c-8902-4c01-a1df-3b2d1152981a&pd_rd_w=Ab5Xj&pd_rd_wg=nTi7C&ref_=sbx_be_s_sparkle_mcd_asin_0_img">
+                <input type="url" id="link-auto-entry" name="link-auto-entry" value="https://www.amazon.com/dp/B0000DZFXZ/ref=redir_mobile_desktop?_encoding=UTF8&amp;aaxitk=25ad622efea6265a9d524c4228ea6dcb&amp;hsa_cr_id=5758817560001&amp;pd_rd_plhdr=t&amp;pd_rd_r=7e54cf5c-8902-4c01-a1df-3b2d1152981a&amp;pd_rd_w=Ab5Xj&amp;pd_rd_wg=nTi7C&amp;ref_=sbx_be_s_sparkle_mcd_asin_0_img">
             </form>
         </div>
         <div id="or">
@@ -60,8 +45,8 @@
         <div id="manual-entry">
             <div id="title-manual-entry"></div>
             <div id="cell-manual-entry"></div>
-        </div>
+        <div id="manual-entry-cell" class="grid-item"><img src="./public/svg/plus.svg" class="cell-image img"><input type="file" name="fileToUpload" accept=".jpg,.jpg,.gif,.png,.svg" style="opacity: 0;" class="cell-link"><input class="cell-title title"><input class="cell-price price"></div><div id="manual-entry-cell" class="grid-item"><img src="./public/svg/plus.svg" class="cell-image img"><input type="file" name="fileToUpload" accept=".jpg,.jpg,.gif,.png,.svg" class="cell-link" style="opacity: 0;"><input class="cell-title title"><input class="cell-price price"></div></div>
     </div>
 </div>
-</body>
-</html>
+
+</body></html>
