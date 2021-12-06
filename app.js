@@ -3,7 +3,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 3000;
-const dbase = require('./dbase.js'); // database stuff
+// database stuff
+const dbase = require('./dbase.js');
+// upload images stuff
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -15,6 +17,8 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage });
+// webscrape stuff
+const wscrap = require('./web-scraper.js');
 
 // connect to database
 let dbPath = './db/';
@@ -53,7 +57,10 @@ app.post('/deleteRowDictArray', function(req, res) {
 });
 app.post('/uploadImg', upload.single('fileToUpload'), function(req, res) {
     console.log('fetched /uploadImg')
-    // return res.formData = req.body;
+});
+app.get('/webScrape', function(req, res) {
+    console.log(req.query.url)
+    wscrap.amazonScraper(req.query.url, function(scraperRes) {res.send(scraperRes)})
 });
 
 // server listens for requests on port
