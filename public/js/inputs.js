@@ -1,9 +1,9 @@
 document.addEventListener('input', event => {
     let eventClassList = Array.from(event.target.classList);
     let eventId = event.target.id;
-    console.log(event);
-    console.log(eventClassList);
-    console.log(eventId);
+    // console.log(event);
+    // console.log(eventClassList);
+    // console.log(eventId);
     if (eventClassList.includes("cell-link")) {
         editPopup.manualEntry.updateImage();
     }
