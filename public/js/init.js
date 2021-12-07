@@ -303,6 +303,8 @@ var editPopup = {
         this.isEdit?(this.title.innerHTML = "Edit Entry"):(this.title.innerHTML = "New Entry")
     },
 
+    loader: document.getElementById("loader"),
+
     autoEntry: {
         title:  document.getElementById("title-auto-entry"),
         link: document.getElementById("link-auto-entry"),

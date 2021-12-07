@@ -11,8 +11,11 @@ document.addEventListener('input', event => {
         editPopup.manualEntry.updateTitle(event.target.value);
     }
     else if (eventId === "link-auto-entry") {
-        console.log(`link = ${editPopup.autoEntry.link.value}`);
+        editPopup.loader.classList.remove('invisible');
         editPopup.autoEntry.webScrape(editPopup.autoEntry.link.value, 
-            editPopup.autoEntry.updateEntry);
+            function(resWebScraper) {
+                editPopup.autoEntry.updateEntry(resWebScraper);
+                editPopup.loader.classList.add('invisible')
+            });
     }
 });

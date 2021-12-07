@@ -211,11 +211,41 @@ header {
 }
 
 #manual-entry {
+    position: relative;
     grid-column: col-content-start / col-content-end;
     grid-row: row-manual-entry-start / row-manual-entry-end;
     box-sizing: border-box;
     padding: 10px;
 }
+
+#loader {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    /* transform: translate(-50%, -50%); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* z-index: 1; */
+    width: 80px;
+    aspect-ratio: 1;
+    margin: auto;
+    border: 8px solid #000000;
+    border-radius: 90%;
+    border-top: 8px solid #2feb16;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
 .move-to-front {
     z-index: 5049 !important;
