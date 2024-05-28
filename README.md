@@ -1,6 +1,6 @@
 # GiftList
 
-We are in the age of information! Out with the old christmas lists, in with the new. This website acts as a gift registry which allows users to upload links to items which are then displayed on their own person page.
+This website acts as a gift registry which allows users to upload links to items which are then displayed on their own person page.
 
 ## Vision
 
